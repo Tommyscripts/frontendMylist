@@ -24,7 +24,7 @@
             class="amber--text text--darken-1"
             rounded
             dark
-     
+            :to="{ name: 'home' }"
           >
             Home
           </v-list-item>
@@ -32,28 +32,9 @@
             class="amber--text text--darken-1"
             rounded
             dark
-        
+            
           >
-            Hamburguesas
-          </v-list-item>
-
-          <v-list-item
-            class="amber--text text--darken-1"
-            rounded
-            dark
-    
-          >
-            Restaurantes
-          </v-list-item>
-
-          <v-list-item
-            color="#001D3D"
-            class="amber--text text--darken-1"
-            rounded
-            dark
-         
-          >
-            About Us
+            Soporte
           </v-list-item>
 
           <div v-if="!store.isLoggedIn">
@@ -81,7 +62,7 @@
               class="amber--text text--darken-1"
               rounded
               dark
-             
+
             >
               Profile
             </v-list-item>
