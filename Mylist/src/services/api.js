@@ -3,28 +3,28 @@ import { useAuthStore } from '../stores/store'
 
 
 const API = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:3000/api',
   headers: {token: localStorage.getItem('token')}
 })
 
 async function signup(newUser) {
-    try {
-      const response = await API.post('/auth/signup', newUser)
-      return response.data
-    } catch (error) {
-      return { error: error.message }
-    }
+  try {
+    const response = await API.post('/auth/signup', newUser)
+    return response.data
+  } catch (error) {
+    return { error: error.message }
   }
-  
-  async function login(newUser) {
-    try {
-      const response = await API.post('/auth/login', newUser)
-      return response.data
-    } catch (error) {
-      return { error: error.message }
-    }
-  
+}
+
+async function login(User) {
+  try {
+    const response = await API.post('/auth/login', User)
+    return response.data
+  } catch (error) {
+    return { error: error.message }
   }
+
+}
   async function deleteUser(remove){
     const store = useAuthStore()
     try{

@@ -42,7 +42,7 @@
               class="amber--text text--darken-1"
               rounded
               dark
-      
+              :to="{ name: 'login' }"
             >
               Login
             </v-list-item>
@@ -52,7 +52,6 @@
               class="amber--text text--darken-1"
               rounded
               dark
-              
             >
               Admin Site
             </v-list-item>
