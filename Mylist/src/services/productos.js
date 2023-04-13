@@ -9,7 +9,7 @@ const API = axios.create({
 
 async function addProduct() {
     try {
-      const response = await API.get("/products");
+      const response = await API.get("/productos/products");
       return response.data;
     } catch (error) {
       return { error: error.message };
@@ -18,7 +18,7 @@ async function addProduct() {
   async function createProduct(newProducto) {
     const store = useAuthStore();
     try {
-      const response = await API.post("/products", newProducto, {
+      const response = await API.post("/productos/products", newProducto, {
         headers: {
           token: store.token,
         },
@@ -30,7 +30,7 @@ async function addProduct() {
   }
   async function deleteProductById(id) {
     try {
-      const response = await API.get(`/products/${id}`);
+      const response = await API.get(`/productos/products/${id}`);
       return response.data;
     } catch (error) {
       return { error: error.message };

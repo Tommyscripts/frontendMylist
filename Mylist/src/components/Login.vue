@@ -32,6 +32,7 @@
             rounded
             dark
             @click="userLogin"
+            @keydown.enter.prevent="userLogin"
           >
             <v-icon color="#40667B"> mdi-check </v-icon>
             Aceptar

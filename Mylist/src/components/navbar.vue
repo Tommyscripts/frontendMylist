@@ -3,7 +3,7 @@
     <v-col>
       <div >
       <v-app-bar
-        color="#40667B">
+        color="#001D3D">
         <v-app-bar-nav-icon id="colores" variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title id="colores" >My list</v-toolbar-title>
@@ -17,29 +17,26 @@
         location="top"
         temporary
         id="colores"
-        color="#40667B"
+        color="#001D3D"
       >
         <v-list>
           <v-list-item
-            class="amber--text text--darken-1"
+            
             rounded
             dark
-            :to="{ name: 'home' }"
-          >
+            :to="{ name: 'home' }" >
             Home
           </v-list-item>
           <v-list-item
-            class="amber--text text--darken-1"
-            rounded
-            dark
             
-          >
+            rounded
+            dark>
             Soporte
           </v-list-item>
 
           <div v-if="!store.isLoggedIn">
             <v-list-item
-              class="amber--text text--darken-1"
+              
               rounded
               dark
               :to="{ name: 'login' }"
@@ -49,26 +46,27 @@
           </div>
           <div v-if="store.isLoggedIn && role === auth">
             <v-list-item
-              class="amber--text text--darken-1"
+             
               rounded
               dark
+              :to="{name:'admin'}"
             >
               Admin Site
             </v-list-item>
           </div>
           <div v-if="store.isLoggedIn">
             <v-list-item
-              class="amber--text text--darken-1"
+              
               rounded
               dark
-
+              :to="{name:'profile'}"
             >
               Profile
             </v-list-item>
             <v-divider></v-divider>
 
             <v-list-item
-              class="amber--text text--darken-1"
+              
               rounded
               dark
               @click="logout()"
@@ -116,6 +114,6 @@ export default {
 </script>
 <style>
 #colores{
-  color: #4BA435;
+  color: #001D3D;
 }
 </style>
