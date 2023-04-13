@@ -1,34 +1,36 @@
 <template>
-    <v-col cols="12" sm="7" class="mt-10 mx-auto">
-      <v-text-field
-        label="Img"
-        :rules="rules"
-        hide-details="auto"
-        v-model="newProducts.Img"
-      ></v-text-field>
-      <v-text-field
-        label="Name"
-        :rules="rules"
-        v-model="newProducts.Name"
-      ></v-text-field>
-      <v-select
-        label="Categorias"
-        :items="categorias"
-        v-model="newProducts.categorias"
-      ></v-select>
-      <v-btn
-        elevation="2"
-        color="#375B83"
-        class="amber--text text--darken-1"
-        rounded
-        dark
-        @click.prevent="addNewProduct"
-        @keydown.enter.prevent="addNewProduct"
-      >
-        Añadir</v-btn
-      >
-    </v-col>
-  </template>
+  <v-col cols="12" sm="7" class="mt-10 mx-auto">
+    <v-text-field
+      label="Img"
+      :rules="rules"
+      hide-details="auto"
+      v-model="newProducts.img"
+    ></v-text-field>
+    <v-text-field
+      label="Name"
+      :rules="rules"
+      v-model="newProducts.name"
+    ></v-text-field>
+    <v-select
+      label="Select"
+      :items="categorias"
+      v-model="newProducts.categorias"
+    >
+    </v-select>
+    <v-btn
+      elevation="2"
+      color="#375B83"
+      rounded
+      dark
+      @click.prevent="addNewProduct"
+      @keydown.enter.prevent="addNewProduct"
+      id="colores"
+    >
+    <v-icon  id="colores"> mdi-check </v-icon>
+      Añadir</v-btn
+    >
+  </v-col>
+</template>
 
 <script>
 import products from "../services/productos";
@@ -39,23 +41,54 @@ export default {
       newProducts: {
         img: "",
         name: "",
-        categorias: ["Carnes", "Pescados", "Congelados", "Arroces", "Lacteos y huevos", "Pasta", "Verduras", "Frutas", "Embutidos", "Panaderia", "Frutos secos", "Salsas", "Encurtidos", "Café y azúcar", "Bollería", "Limpieza"],
+        categorias: "",
       },
       rules: [
         (value) => !!value || "Required.",
         (value) => (value && value.length >= 3) || "Min 3 characters",
       ],
+      categorias: [
+        "Carnes",
+        "Pescados",
+        "Congelados",
+        "Arroces",
+        "Lacteos y huevos",
+        "Pasta",
+        "Verduras",
+        "Frutas",
+        "Embutidos",
+        "Panaderia",
+        "Frutos secos",
+        "Salsas",
+        "Encurtidos",
+        "Café y azúcar",
+        "Bollería",
+        "Limpieza",
+      ],
     };
   },
   methods: {
     async addNewProduct() {
-      const response = await products.addProduct(this.newProducts);
+      const response = await products.createProduct(this.newProducts);
       if (response === "error") {
         alert("Error creando el producto");
       } else {
+        alert("El producto ha sido creado");
         this.$router.push({ name: "products" });
+        return response;
       }
     },
   },
 };
 </script>
+<style>
+#text{
+  color: #4ba435;
+  font-size: 3vh;
+  font-weight: bold;
+  text-align: justify;
+}
+#colores {
+  color: #4ba435;
+}
+</style>
