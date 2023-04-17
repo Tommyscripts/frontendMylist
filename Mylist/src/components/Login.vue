@@ -11,6 +11,7 @@
           filled
           rounded
           dense
+          @keydown.enter.prevent="userLogin"
         ></v-text-field>
         <v-text-field
           label="Password"
@@ -23,6 +24,7 @@
           dense
           :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="visible = !visible"
+          @keydown.enter.prevent="userLogin"
         ></v-text-field>
         <v-card-actions>
           <v-btn
@@ -32,7 +34,6 @@
             rounded
             dark
             @click="userLogin"
-            @keydown.enter.prevent="userLogin"
           >
             <v-icon color="#40667B"> mdi-check </v-icon>
             Aceptar
