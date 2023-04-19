@@ -1,7 +1,7 @@
 <template >
   <v-container>
     <v-row>
-      <v-col>
+      <v-col cols="12" md="8" sm="4" class="mx-auto" >
         <div v-if="store.isLoggedIn"  id="colores">
    <a id="text" class="d-flex justify-center">Bienvenido/a</a>
     <br>
@@ -32,7 +32,6 @@
       que tenemos en casa, a la lista de la compra, listas personalizadas. Todos
       los productos están separado por categorías. Para ello necesitarás crear una
       cuenta.
-
     </div>
       <br>
       <br>

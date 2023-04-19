@@ -22,6 +22,5 @@ components:{
 <style>
 .body{
   background-color: #363b6a;
-  max-width: auto;
 }
 </style>
