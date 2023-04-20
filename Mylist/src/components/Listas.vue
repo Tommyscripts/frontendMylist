@@ -2,8 +2,8 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="8" sm="4" v-for="(list, idx) in lists" :key="idx">
-        <v-card class="mx-auto" max-width="344" :class="list.color">
-          <v-card-title id="colores">
+        <v-card class="mx-auto" max-width="344" :class="list.color" :to="list.route">
+          <v-card-title>
             {{ list.name }}
             <v-avatar>
               <v-img :src="list.img"> </v-img>
@@ -19,10 +19,10 @@
 import api from "../services/list.js";
 
 export default {
-  async created() {
+/*async created() {
     const result = await api.getList();
     this.listas = result;
-  },
+  },*/
   data() {
     return {
       listas: [],
@@ -31,6 +31,7 @@ export default {
           name: "Todos los productos",
           color: "red",
           img: "https://cdn-icons-png.flaticon.com/512/1312/1312307.png",
+          route:"/categorias",
         },
         {
           name: "Lista de compra",

@@ -25,11 +25,12 @@
       color="#375B83"
       rounded
       dark
+      :rules="rules"
       @click.prevent="addNewProduct"
       @keydown.enter.prevent="addNewProduct"
       id="colores"
     >
-    <v-icon  id="colores"> mdi-check </v-icon>
+      <v-icon id="colores"> mdi-check </v-icon>
       Añadir</v-btn
     >
   </v-col>
@@ -72,20 +73,19 @@ export default {
   },
   methods: {
     async addNewProduct() {
-      const response = await products.createProduct(this.newProducts);
-      if (response === "error") {
-        alert("Error creando el producto");
-      } else {
-        alert("El producto ha sido creado");
-        this.$router.push({ name: "products" });
-        return response;
+      try {
+        const response = await products.createProduct(this.newProducts);
+        console.log(this.newProducts);
+        return response, alert("El producto ha sido creado");
+      } catch {
+        alert("Error al crear el producto");
       }
     },
   },
 };
 </script>
 <style>
-#text{
+#text {
   color: #4ba435;
   font-size: 3vh;
   font-weight: bold;
