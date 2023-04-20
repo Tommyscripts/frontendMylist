@@ -88,46 +88,55 @@ export default {
           name: "Frutas",
           color: "frutas",
           img: "https://cdn-icons-png.flaticon.com/512/1625/1625048.png",
+          route:"/frutas"
         },
         {
           name: "Embutidos",
           color: "embutidos",
           img: "https://cdn-icons-png.flaticon.com/512/5239/5239138.png",
+          route:"/embutidos"
         },
         {
           name: "Panaderia",
           color: "panaderia",
           img: "https://cdn-icons-png.flaticon.com/512/992/992747.png",
+          route:"/panaderia"
         },
         {
           name: "Frutos secos",
           color: "frutosSecos",
           img: "https://cdn-icons-png.flaticon.com/512/5263/5263359.png",
+          route:"/frutosSecos"
         },
         {
           name: "Salsas",
           color: "salsas",
           img: "https://cdn-icons-png.flaticon.com/512/3082/3082037.png",
+          route:"/salsas"
         },
         {
           name: "Encurtidos",
           color: "encurtidos",
           img: "https://cdn-icons-png.flaticon.com/512/2079/2079331.png",
+          route: "/encurtidos"
         },
         {
           name: "Cafe y azucar",
           color: "cafeyAzucar",
           img: "https://cdn-icons-png.flaticon.com/512/6451/6451224.png",
+          route:"/cafeyazucar"
         },
         {
           name: "Bollería",
           color: "bolleria",
           img: "https://cdn-icons-png.flaticon.com/512/977/977699.png",
+          route:"/bolleria"
         },
         {
           name: "Limpieza",
           color: "limpieza",
           img: "https://cdn-icons-png.flaticon.com/512/994/994928.png",
+          route:"/limpieza"
         },
       ],
     };

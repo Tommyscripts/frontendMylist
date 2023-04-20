@@ -1,13 +1,13 @@
 <template>
     <v-container>
       <v-row>
-        <v-col cols="12" md="8" sm="4" v-for="(pasta, idx) in pastas" :key="idx" >
+        <v-col cols="12" md="8" sm="4" v-for="(salsa, idx) in salsas" :key="idx" >
           <v-card class="color">
             <v-card-title>
               <v-avatar>
-                <v-img :src="pasta.img"> </v-img>
+                <v-img :src="salsa.img"> </v-img>
               </v-avatar>
-              {{ pasta.name }}
+              {{ salsa.name }}
             </v-card-title>
           </v-card>
         </v-col>
@@ -32,15 +32,15 @@
     data() {
       return {
         productos: [],
-        pastas: [],
+        salsas: [],
       };
     },
     async created() {
       const result = await producto.addProduct();
       this.productos = result;
       this.productos.filter((el) => {
-        if (el.categorias === "Pasta") {
-          this.pastas.push(el);
+        if (el.categorias === "Salsas") {
+          this.salsas.push(el);
         }
       });
     },
@@ -49,7 +49,7 @@
   
   <style>
   .color{
-      background-color: #BBAE3D;
+      background-color: #8F5678;
       color: white;
   }
   </style>
