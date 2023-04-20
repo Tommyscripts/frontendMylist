@@ -10,6 +10,10 @@ import Carnes from '../views/CarnesView.vue'
 import Pescados from '../views/pescaderiaView.vue'
 import Congelados from '../views/CongeladosView.vue'
 import Arroz from '../views/ArrocesView.vue'
+import Lacteo from '../views/LacteosYHuevosView.vue'
+import Pasta from '../views/PastaView.vue'
+import Verduras from '../views/VerdurasView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +72,21 @@ const router = createRouter({
       path:'/arroces',
       name:'arroces',
       component: Arroz
+    },
+    {
+      path:'/lacteosyhuevos',
+      name:'lacteosyhuevos',
+      component: Lacteo
+    },
+    {
+      path:'/pasta',
+      name:'pasta',
+      component: Pasta
+    },
+    {
+      path:'/verduras',
+      name:'verduras',
+      component: Verduras
     }
     
   ]

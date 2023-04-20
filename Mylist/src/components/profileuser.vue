@@ -21,7 +21,7 @@
         <v-btn rounded color="#375B83" @click="retroceder()">
           <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
         </v-btn>
-        <v-space></v-space>
+ 
       </v-row>
       <v-row id="btn">
         <v-btn rounded color="#375B83" @click="borrarCuenta()">
