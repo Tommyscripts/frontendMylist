@@ -1,5 +1,8 @@
 <template>
-    <v-card class="mt-10">
+  <v-container>
+    <v-row >
+    <v-col cols="12" sm="10" md="6" class="mx-auto">
+      <v-card class="mt-10">
      <v-card-title>
       Signup
      </v-card-title>
@@ -79,6 +82,11 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    </v-col>
+  </v-row>
+   
+  </v-container>
+  
   </template>
   
   <script>

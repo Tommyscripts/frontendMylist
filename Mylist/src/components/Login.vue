@@ -1,21 +1,21 @@
 <template>
-  <v-row>
+  <v-container>
+    <v-row >
     <v-col cols="12" sm="10" md="6" class="mx-auto">
-      <v-card class="pa-4">
+      <v-card class="pa-4 ma-4">
         <v-card-title>Login</v-card-title>
         <v-text-field
           label="Email"
           placeholder="Email"
-
           v-model="email"
           filled
           rounded
           dense
+          @keydown.enter.prevent="userLogin"
         ></v-text-field>
         <v-text-field
           label="Password"
           :type="visible ? 'text' : 'password'"
-  
           placeholder="Password"
           v-model="password"
           filled
@@ -23,6 +23,7 @@
           dense
           :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="visible = !visible"
+          @keydown.enter.prevent="userLogin"
         ></v-text-field>
         <v-card-actions>
           <v-btn
@@ -32,7 +33,6 @@
             rounded
             dark
             @click="userLogin"
-            @keydown.enter.prevent="userLogin"
           >
             <v-icon color="#40667B"> mdi-check </v-icon>
             Aceptar
@@ -68,6 +68,9 @@
       </v-card>
     </v-col>
   </v-row>
+
+  </v-container>
+ 
 </template>
 
 <script>
@@ -77,11 +80,10 @@ import api from "../services/api";
 export default {
   data() {
     return {
-      
       visible: false,
       email: "",
       password: "",
-      error:"",
+      error: "",
 
       authStore: useAuthStore(),
     };
@@ -99,14 +101,10 @@ export default {
         this.authStore.login(respond.token, respond.email);
         this.$router.push({ name: "home" });
       }
-
     },
     retroceder() {
       this.$router.go(-1);
     },
   },
 };
-
 </script>
-
-<style scoped></style>

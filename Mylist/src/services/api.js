@@ -23,7 +23,6 @@ async function login(User) {
   } catch (error) {
     return { error: error.message }
   }
-
 }
   async function deleteUser(remove){
     const store = useAuthStore()

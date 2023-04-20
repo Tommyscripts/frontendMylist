@@ -1,5 +1,8 @@
-<template>
-  <div v-if="store.isLoggedIn" class="back" id="colores">
+<template >
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="8" sm="4" class="mx-auto" >
+        <div v-if="store.isLoggedIn"  id="colores">
    <a id="text" class="d-flex justify-center">Bienvenido/a</a>
     <br>
     <br>
@@ -20,7 +23,7 @@
       <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
     </v-btn>
   </div>
-  <div v-else class="back" id="colores">
+  <div v-else id="colores">
    <a id="text" class="d-flex justify-center">Bienvenido/a</a>
     <br>
     <br>
@@ -29,7 +32,6 @@
       que tenemos en casa, a la lista de la compra, listas personalizadas. Todos
       los productos están separado por categorías. Para ello necesitarás crear una
       cuenta.
-
     </div>
       <br>
       <br>
@@ -48,6 +50,11 @@
       <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
     </v-btn>
   </div>
+      </v-col>
+    </v-row>
+
+  </v-container>
+  
 </template>
 
 <script>
@@ -70,6 +77,9 @@ export default {
 };
 </script>
 <style>
+
+
+
 #text{
   color: #4ba435;
   font-size: 3vh;
@@ -78,12 +88,6 @@ export default {
 }
 #colores {
   color: #4ba435;
+
 }
-.back {
-  background-color: #363b6a;
-  height: 100vh;
-}
-
-
-
 </style>

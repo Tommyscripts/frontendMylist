@@ -7,6 +7,7 @@
         rounded
         dense
         v-model="newUser.name"
+        class="bg-green"
       ></v-text-field>
       <v-text-field
         label="Username"
@@ -15,6 +16,7 @@
         rounded
         dense
         v-model="newUser.username"
+        class="bg-green"
       ></v-text-field>
       <v-text-field
         label="Email"
@@ -24,6 +26,7 @@
         rounded
         dense
         v-model="newUser.email"
+        class="bg-green"
       ></v-text-field>
       <v-text-field
         label="Password"
@@ -36,6 +39,7 @@
         :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
         @click:append="visible = !visible"
         v-model="newUser.password"
+        class="bg-green"
       ></v-text-field>
       <v-text-field
         label="Confirmar Password"
@@ -47,8 +51,9 @@
         dense
         :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
         @click:append="visible = !visible"
+        class="bg-green"
       ></v-text-field>
-      <v-row>
+      <v-row class="pt-9">
         <v-btn
           elevation="2"
           id="colores"
@@ -59,18 +64,6 @@
         >
           <v-icon  id="colores"> mdi-check </v-icon>
           Aceptar
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn
-          elevation="2"
-          rounded
-          dark
-          @click="retroceder()"
-          id="colores"
-          color="#375B83"
-        >
-          <v-icon  class="mr-1" id="colores"> mdi-arrow-left</v-icon>
-          Volver
         </v-btn>
       </v-row>
     </v-col>

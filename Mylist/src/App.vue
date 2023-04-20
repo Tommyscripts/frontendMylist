@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-main>
+  <v-app >
+    <v-main class="body">
      <navbar></navbar>
      <RouterView></RouterView>
     </v-main>
@@ -19,3 +19,8 @@ components:{
 
 }
 </script>
+<style>
+.body{
+  background-color: #363b6a;
+}
+</style>

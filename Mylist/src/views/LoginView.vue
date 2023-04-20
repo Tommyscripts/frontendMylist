@@ -1,7 +1,5 @@
 <template>
-  
-    <LoginVue />
-
+        <LoginVue />
 </template>
 
 <script>
