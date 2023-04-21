@@ -3,17 +3,12 @@
     <v-row>
       <v-col
         cols="12"
-        md="8"
-        sm="4"
+        md="4"
+        sm="6"
         v-for="(categoria, idx) in categorias"
         :key="idx"
       >
-        <v-card
-          class="mx-auto"
-          max-width="344"
-          :class="categoria.color"
-          :to="categoria.route"
-        >
+        <v-card class="mx-auto" :class="categoria.color" :to="categoria.route">
           <v-card-title>
             <v-avatar>
               <v-img :src="categoria.img"></v-img>
@@ -22,11 +17,13 @@
           </v-card-title>
         </v-card>
       </v-col>
-      <v-row id="btn">
+    </v-row>
+    <v-row id="btn" justify="end">
+      <v-col cols="12">
         <v-btn rounded color="#375B83" @click="retroceder()">
           <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
         </v-btn>
-      </v-row>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -70,73 +67,73 @@ export default {
           name: "Lacteos y huevos",
           color: "lacteosyhuevos",
           img: "https://cdn-icons-png.flaticon.com/512/1509/1509470.png",
-          route:"/lacteosyhuevos"
+          route: "/lacteosyhuevos",
         },
         {
           name: "Pasta",
           color: "pasta",
           img: "https://cdn-icons-png.flaticon.com/512/3871/3871987.png",
-          route: "/pasta"
+          route: "/pasta",
         },
         {
           name: "Verduras",
           color: "verduras",
           img: "https://cdn-icons-png.flaticon.com/512/4251/4251938.png",
-          route: "/verduras"
+          route: "/verduras",
         },
         {
           name: "Frutas",
           color: "frutas",
           img: "https://cdn-icons-png.flaticon.com/512/1625/1625048.png",
-          route:"/frutas"
+          route: "/frutas",
         },
         {
           name: "Embutidos",
           color: "embutidos",
           img: "https://cdn-icons-png.flaticon.com/512/5239/5239138.png",
-          route:"/embutidos"
+          route: "/embutidos",
         },
         {
           name: "Panaderia",
           color: "panaderia",
           img: "https://cdn-icons-png.flaticon.com/512/992/992747.png",
-          route:"/panaderia"
+          route: "/panaderia",
         },
         {
           name: "Frutos secos",
           color: "frutosSecos",
           img: "https://cdn-icons-png.flaticon.com/512/5263/5263359.png",
-          route:"/frutosSecos"
+          route: "/frutosSecos",
         },
         {
           name: "Salsas",
           color: "salsas",
           img: "https://cdn-icons-png.flaticon.com/512/3082/3082037.png",
-          route:"/salsas"
+          route: "/salsas",
         },
         {
           name: "Encurtidos",
           color: "encurtidos",
           img: "https://cdn-icons-png.flaticon.com/512/2079/2079331.png",
-          route: "/encurtidos"
+          route: "/encurtidos",
         },
         {
           name: "Cafe y azucar",
           color: "cafeyAzucar",
           img: "https://cdn-icons-png.flaticon.com/512/6451/6451224.png",
-          route:"/cafeyazucar"
+          route: "/cafeyazucar",
         },
         {
           name: "Bollería",
           color: "bolleria",
           img: "https://cdn-icons-png.flaticon.com/512/977/977699.png",
-          route:"/bolleria"
+          route: "/bolleria",
         },
         {
           name: "Limpieza",
           color: "limpieza",
           img: "https://cdn-icons-png.flaticon.com/512/994/994928.png",
-          route:"/limpieza"
+          route: "/limpieza",
         },
       ],
     };
