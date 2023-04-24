@@ -73,25 +73,14 @@ export default {
   },
   methods: {
     async addNewProduct() {
-  try {
-    // Comprobar si el producto ya existe
-    let productoExistente = this.products.find((producto) => producto.name === this.newProducts.name);
-    if (productoExistente) {
-      console.log(`El producto ${this.newProducts.name} ya existe`);
-      alert(`El producto ${this.newProducts.name} ya existe`);
-      return;
-    }
-    
-    // Si el producto no existe, crearlo
-    const response = await products.createProduct(this.newProducts);
-    console.log(this.newProducts);
-    alert("El producto ha sido creado");
-    return response;
-  } catch {
-    alert("El producto ya existe");
-  }
-}
-
+      try {
+        const response = await products.createProduct(this.newProducts);
+        console.log(this.newProducts);
+        return response, alert("El producto ha sido creado");
+      } catch {
+        alert("Error al crear el producto");
+      }
+    },
   },
 };
 </script>
