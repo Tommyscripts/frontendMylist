@@ -76,13 +76,30 @@ export default {
       this.$router.go(-1);
     },
     async agregarProducto(name, id) {
-      this.lists.filter((el) => {
+      let listaEncontrada;
+
+      // Buscar la lista por su nombre
+      this.lists.forEach((el) => {
         if (el.name === name) {
-          this.idList = el._id.toLocaleString();
+          listaEncontrada = el;
         }
       });
 
-      const respond = await api.createListAdd(this.idList, id);
+      // Buscar el producto en la lista
+      let productoExistente = listaEncontrada.productos.find(
+        (producto) => producto === id
+      );
+
+      // Si el producto ya existe en la lista, mostrar mensaje de error
+      if (productoExistente) {
+        alert(`El producto  ya se encuentra en la lista `);
+        return productoExistente;
+      }
+
+      // Si el producto no existe en la lista, agregarlo
+      const respond = await api.createListAdd(listaEncontrada._id, id);
+      listaEncontrada.productos.push(respond);
+      alert("El producto ha sido agregado a la lista")
       return respond;
     },
   },
