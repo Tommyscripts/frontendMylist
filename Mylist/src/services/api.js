@@ -92,10 +92,10 @@ async function login(User) {
     }
   }
 
-  async function createListAdd(id){
+  async function createListAdd(list,info){
     const store = useAuthStore()
     try{
-      const response = await API.patch('/users/lista/add',{id:id},{
+      const response = await API.patch('/users/lista/add',{id:list, producto:info},{
         headers:{
           token: store.token
         }
@@ -105,6 +105,7 @@ async function login(User) {
       return error
     }
   }
+
   async function updateListaRemove(id){
     const store = useAuthStore()
     try{
@@ -118,9 +119,6 @@ async function login(User) {
       return error
     }
   }
-
-
-
   
   export default {
     signup,

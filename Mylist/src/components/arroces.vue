@@ -46,23 +46,20 @@
 <script>
 import producto from "../services/productos.js";
 import api from "../services/api.js";
-import listas from "../services/list.js"
+import listas from "../services/list.js";
 
 export default {
   name: "Button",
-  methods: {
-    retroceder() {
-      this.$router.go(-1);
-    },
-  },
   data() {
     return {
       productos: [],
       arroces: [],
       lists: [],
+      idList: "",
     };
   },
   async created() {
+    // addProduct es un .get para mostrar los productos
     const result = await producto.addProduct();
     this.productos = result;
     this.productos.filter((el) => {
@@ -70,19 +67,25 @@ export default {
         this.arroces.push(el);
       }
     });
-     const user = await api.getUser()
-     console.log(user)
-     this.lists = user.listas
+    const user = await api.getUser();
+    console.log(user);
+    this.lists = user.listas;
   },
-  methods:{
-  async  agregarProducto(){
-    
+  methods: {
+    retroceder() {
+      this.$router.go(-1);
+    },
+    async agregarProducto(name, id) {
+      this.lists.filter((el) => {
+        if (el.name === name) {
+          this.idList = el._id.toLocaleString();
+        }
+      });
 
-      
-}
-  }
- 
-
+      const respond = await api.createListAdd(this.idList, id);
+      return respond;
+    },
+  },
 };
 </script>
 
