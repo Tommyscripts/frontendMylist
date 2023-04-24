@@ -64,7 +64,7 @@ export default {
     this.productos = result;
     this.productos.filter((el) => {
       if (el.categorias === "Encurtidos") {
-        this.embutidos.push(el);
+        this.encurtidos.push(el);
       }
     });
     const user = await api.getUser();
