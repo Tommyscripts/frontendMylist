@@ -71,9 +71,17 @@ export default {
       }
     });
      const user = await api.getUser()
+     console.log(user)
      this.lists = user.listas
   },
-  
+  methods:{
+  async  agregarProducto(){
+    
+
+      
+}
+  }
+ 
 
 };
 </script>
