@@ -22,8 +22,7 @@
                   <v-list-item
                     v-for="(list, index) in lists.slice(1)"
                     :key="index"
-                    @click="agregarProducto(list.name, carne._id)"
-                  >
+                    @click="agregarProducto(list.name, carne._id)">
                     <v-list-item-title>
                       {{ list.name }}
                     </v-list-item-title>
@@ -76,32 +75,53 @@ export default {
       this.$router.go(-1);
     },
     async agregarProducto(name, id) {
-      let listaEncontrada;
+  let listaEncontrada;
 
-      // Buscar la lista por su nombre
-      this.lists.forEach((el) => {
-        if (el.name === name) {
-          listaEncontrada = el;
-        }
-      });
+  // Buscar la lista por su nombre
+  this.lists.forEach((el) => {
+    if (el.name === name) {
+      listaEncontrada = el;
+    }
+  });
 
-      // Buscar el producto en la lista
-      let productoExistente = listaEncontrada.productos.find(
-        (producto) => producto === id
-      );
+  // Buscar el producto en la lista
+  let productoExistente = listaEncontrada.productos.find(
+    (producto) => producto === id
+  );
 
-      // Si el producto ya existe en la lista, mostrar mensaje de error
-      if (productoExistente) {
-        alert(`El producto  ya se encuentra en la lista `);
-        return productoExistente;
-      }
+  // Verificar si el producto ya existe en alguna de las dos últimas listas
+  let productoExistenteEnOtraLista = false;
+  if (name !== "Todos los productos") {
+    const casa = this.lists.find((el) => el.name === "Lista de casa");
+    const compra = this.lists.find((el) => el.name === "Lista de compra");
+    if (casa && casa.productos.includes(id)) {
+      alert(`El producto ya se encuentra en la lista "Productos de casa"`);
+      productoExistenteEnOtraLista = true;
+    }
+    if (compra && compra.productos.includes(id)) {
+      alert(`El producto ya se encuentra en la lista "Productos de compra"`);
+      productoExistenteEnOtraLista = true;
+    }
+  }
 
-      // Si el producto no existe en la lista, agregarlo
-      const respond = await api.createListAdd(listaEncontrada._id, id);
-      listaEncontrada.productos.push(respond);
-      alert("El producto ha sido agregado a la lista")
-      return respond;
-    },
+  // Si el producto ya existe en alguna de las dos últimas listas, retornar sin hacer nada más
+  if (productoExistenteEnOtraLista) {
+    return productoExistente;
+  }
+
+  // Si el producto ya existe en la lista, mostrar mensaje de error
+  if (productoExistente) {
+    alert(`El producto ya se encuentra en la lista`);
+    return productoExistente;
+  }
+
+  // Si el producto no existe en la lista, agregarlo
+  const respond = await api.createListAdd(listaEncontrada._id, id);
+  listaEncontrada.productos.push(respond);
+  alert("El producto ha sido agregado a la lista");
+  return respond;
+}
+
   },
 };
 </script>
