@@ -1,13 +1,13 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="8" sm="4" v-for="(congelado, idx) in congelados" :key="idx">
+      <v-col cols="12" md="8" sm="4" v-for="(bolleria, idx) in bollerias" :key="idx">
         <v-card class="color">
           <v-card-title class="d-flex">
             <v-avatar>
-              <v-img :src="congelado.img"> </v-img>
+              <v-img :src="bolleria.img"> </v-img>
             </v-avatar>
-            {{ congelado.name }}
+            {{ bolleria.name }}
             <v-card-item>
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
@@ -22,7 +22,7 @@
                   <v-list-item
                     v-for="(list, index) in lists.slice(1)"
                     :key="index"
-                    @click="agregarProducto(list.name, congelado._id)"
+                    @click="agregarProducto(list.name, bolleria._id)"
                   >
                     <v-list-item-title>
                       {{ list.name }}
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       productos: [],
-      congelados: [],
+      bollerias: [],
       lists: [],
       idList: "",
     };
@@ -63,8 +63,8 @@ export default {
     const result = await producto.addProduct();
     this.productos = result;
     this.productos.filter((el) => {
-      if (el.categorias === "Congelados") {
-        this.congelados.push(el);
+      if (el.categorias === "Bollería") {
+        this.bollerias.push(el);
       }
     });
     const user = await api.getUser();
@@ -129,7 +129,7 @@ export default {
   
   <style>
   .color{
-      background-color: #415A9B;
+      background-color: #8F7C56;
       color: white;
   }
   </style>

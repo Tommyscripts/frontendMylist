@@ -7,6 +7,20 @@ const API = axios.create({
   headers: {token: localStorage.getItem('token')}
 })
 
+async function getUser(){
+  const store = useAuthStore()
+  try{
+    const response = await API.get('/users/profile',{
+      headers:{
+        token: store.token
+      }
+    })
+    return response.data
+  } catch (error){
+    return error
+  }
+}
+
 async function signup(newUser) {
   try {
     const response = await API.post('/auth/signup', newUser)
@@ -51,11 +65,51 @@ async function login(User) {
       return error
     }
   }
-
- async function getUser(){
+  async function getLista(){
     const store = useAuthStore()
     try{
-      const response = await API.get('/users/profile',{
+      const response = await API.get('/users/lista',{
+        headers:{
+          token: store.token
+        }
+      })
+      return response.data
+    } catch (error){
+      return error
+    }
+  }
+  async function getListaProducto(){
+    const store = useAuthStore()
+    try{
+      const response = await API.get('/users/lista/producto',{
+        headers:{
+          token: store.token
+        }
+      })
+      return response.data
+    } catch (error){
+      return error
+    }
+  }
+
+  async function createListAdd(list,info){
+    const store = useAuthStore()
+    try{
+      const response = await API.patch('/users/lista/add',{id:list, producto:info},{
+        headers:{
+          token: store.token
+        }
+      })
+      return response.data
+    } catch (error){
+      return error
+    }
+  }
+
+  async function updateListaRemove(id){
+    const store = useAuthStore()
+    try{
+      const response = await API.patch('/users/lista/remove',{id:id},{
         headers:{
           token: store.token
         }
@@ -71,5 +125,9 @@ async function login(User) {
     login,
     deleteUser,
     updateUser,
-    getUser
+    getUser,
+    getLista,
+    getListaProducto,
+    createListAdd,
+    updateListaRemove
   }
