@@ -68,7 +68,6 @@ export default {
       }
     });
     const user = await api.getUser();
-    console.log(user);
     this.lists = user.listas;
   },
   methods: {
@@ -126,7 +125,7 @@ export default {
   },
 };
 </script>
-  <style>
+  <style scoped>
   .color{
       background-color: #BC419A;
       color: white;

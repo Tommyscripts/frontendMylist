@@ -37,11 +37,13 @@ export default {
           name: "Lista de compra",
           color: "blue",
           img: "https://cdn-icons-png.flaticon.com/512/2203/2203183.png",
+          route:"/listadelacompra"
         },
         {
           name: "Lista de casa",
           color: "green",
           img: "https://cdn-icons-png.flaticon.com/512/619/619153.png",
+          route:"/listadecasa"
         },
       ],
     };

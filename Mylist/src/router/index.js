@@ -22,6 +22,8 @@ import Encurtidos from "../views/EncurtidosView.vue";
 import CafeyAzucar from "../views/CafeyAzucarView.vue";
 import Bolleria from "../views/BolleriaView.vue";
 import Limpieza from "../views/LimpiezaView.vue"
+import ListaDeCasa from "../views/ListaDeCasaView.vue"
+import ListaDeLaCompra from "../views/ListaDeLaCompraView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -140,6 +142,14 @@ const router = createRouter({
       name: "limpieza", 
       component: Limpieza 
     },
+    { path: "/listadecasa", 
+    name: "listadecasa", 
+    component: ListaDeCasa
+  },
+  { path: "/listadelacompra",  
+  name: "listadelacompra", 
+  component: ListaDeLaCompra
+},
   ],
 });
 

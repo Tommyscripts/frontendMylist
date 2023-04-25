@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="8" sm="4" v-for="(congelado, idx) in congelados" :key="idx">
-        <v-card class="color">
+        <v-card  id="color">
           <v-card-title class="d-flex">
             <v-avatar>
               <v-img :src="congelado.img"> </v-img>
@@ -68,7 +68,6 @@ export default {
       }
     });
     const user = await api.getUser();
-    console.log(user);
     this.lists = user.listas;
   },
   methods: {
@@ -127,8 +126,8 @@ export default {
 };
 </script>
   
-  <style>
-  .color{
+  <style scoped>
+  #color{
       background-color: #415A9B;
       color: white;
   }

@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="8" sm="4" v-for="(pescaderia, idx) in pescaderias" :key="idx">
-        <v-card class="color">
+      <v-col cols="12" md="8" sm="4" v-for="(pescaderia, idx) in pescaderias" :key="idx" >
+        <v-card  id="color">
           <v-card-title class="d-flex">
             <v-avatar>
               <v-img :src="pescaderia.img"> </v-img>
@@ -63,12 +63,11 @@ export default {
     const result = await producto.addProduct();
     this.productos = result;
     this.productos.filter((el) => {
-      if (el.categorias === "Pescadería") {
+      if (el.categorias === "Pescados") {
         this.pescaderias.push(el);
       }
     });
     const user = await api.getUser();
-    console.log(user);
     this.lists = user.listas;
   },
   methods: {
@@ -127,8 +126,8 @@ export default {
 };
 </script>
   
-  <style>
-  .color{
+  <style scoped>
+  #color{
       background-color: #494F60;
       color: white;
   }
