@@ -1,11 +1,11 @@
 <template>
-  <v-container >
-    <v-row >
-      <v-col cols="12" md="8" sm="4" class="mx-auto" >
-        <v-list >
-          <v-list-item >
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="8" sm="4" class="mx-auto">
+        <v-list>
+          <v-list-item>
             <v-list-item-content>
-              <v-list-item-title  class="text-h6">
+              <v-list-item-title class="text-h6">
                 {{ user }}
               </v-list-item-title>
               <v-list-item-subtitle>{{ email }}</v-list-item-subtitle>
@@ -14,18 +14,18 @@
         </v-list>
         <v-list nav dense>
           <v-list-item-group color="primary">
-            <v-list-item @click.prevent="setHome()"       >
+            <v-list-item @click.prevent="setHome()">
               <v-list-item-icon>
                 <v-icon rounded color="#375B83">mdi-shield-home</v-icon>
               </v-list-item-icon>
-              <v-list-item-content >
+              <v-list-item-content>
                 <v-list-item-title rounded color="#375B83"
                   >Inicio</v-list-item-title
                 >
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item @click.prevent="setAddProduct()"      >
+            <v-list-item @click.prevent="setAddProduct()">
               <v-list-item-icon>
                 <v-icon rounded color="#375B83">mdi-store-plus</v-icon>
               </v-list-item-icon>
@@ -49,12 +49,12 @@
           </v-list-item-group>
         </v-list>
         <CrearProducto v-if="products" />
-      <CrearAdmin v-if="admin"></CrearAdmin>
-      <v-row class="pa-10">
-        <v-btn rounded color="#375B83" @click="retroceder()">
-          <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-        </v-btn>
-      </v-row>
+        <CrearAdmin v-if="admin"></CrearAdmin>
+        <v-row class="pa-10">
+          <v-btn rounded color="#375B83" @click="retroceder()">
+            <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
+          </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -98,7 +98,7 @@ export default {
       this.$router.go(-1);
     },
   },
-  
+
   async created() {
     this.email = this.store.email;
     const userA = await api.getUser(this.store.token);

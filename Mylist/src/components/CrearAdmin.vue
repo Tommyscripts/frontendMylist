@@ -1,5 +1,7 @@
 <template>
-    <v-col cols="12" sm="7" class="mt-10 mb-4 mx-auto">
+  <v-container>
+    <v-row>
+      <v-col cols="12" sm="7" class="mt-10 mb-4 mx-auto">
       <v-text-field
         label="Nombre"
         placeholder="Nombre"
@@ -67,6 +69,9 @@
         </v-btn>
       </v-row>
     </v-col>
+    </v-row>
+  </v-container>
+    
   </template>
   
   <script>
