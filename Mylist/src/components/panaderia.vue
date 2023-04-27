@@ -63,7 +63,7 @@ export default {
     const result = await producto.addProduct();
     this.productos = result;
     this.productos.filter((el) => {
-      if (el.categorias === "Panadería") {
+      if (el.categorias === "Panaderia") {
         this.panaderias.push(el);
       }
     });
