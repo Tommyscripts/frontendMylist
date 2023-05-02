@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="8" sm="4" v-for="(pescaderia, idx) in pescaderias" :key="idx" >
+      <v-col cols="12" md="4" sm="6" v-for="(pescaderia, idx) in pescaderias" :key="idx" >
         <v-card  id="color">
           <v-card-title class="d-flex">
             <v-avatar>
