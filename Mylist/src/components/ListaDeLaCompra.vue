@@ -9,7 +9,7 @@
             </v-img>
           </v-avatar>
           {{ producto.name }}
-          <v-btn class="ml-4" rounded color="#375B83" > <a id="colores">Comprado </a> </v-btn>
+          <v-btn class="ml-4" rounded color="#375B83" @click="removeProducto(producto._id)" > <a id="colores">Comprado </a> </v-btn>
         </v-card-item>
       </v-col>
     </v-row>
@@ -24,11 +24,6 @@
 <script>
 import api from "../services/api.js";
 export default {
-  methods: {
-    retroceder() {
-      this.$router.go(-1);
-    },
-  },
   data() {
     return {
       lists: [],
@@ -43,6 +38,28 @@ export default {
           this.compra=el
         }
       });
+  },
+  methods: {
+    retroceder() {
+      this.$router.go(-1);
+    },
+    async removeProducto(id) {
+      try {
+        // Elimina el producto de la lista de casa
+        const removed = await api.updateListaRemoveCompra(id);
+        console.log(
+          `Producto eliminado de la lista de casa: ${id}`
+        );
+
+        // Agrega el producto a la lista de compra
+         const added = await api.createListAdd(id);
+         console.log(`Producto agregado a la lista de compra: ${id}`);
+
+        return { removed };
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>
