@@ -106,10 +106,25 @@ async function login(User) {
     }
   }
 
-  async function updateListaRemove(id){
+  async function updateListaRemoveCasa(id){
+    const store = useAuthStore()
+    console.log(id)
+    try{
+      const response = await API.patch(`/users/lista/remove/${id}`,{
+        headers:{
+          token: store.token
+        }
+      })
+      return response.data
+    } catch (error){
+      return error
+    }
+  }
+
+  async function updateListaRemoveCompra(id){
     const store = useAuthStore()
     try{
-      const response = await API.patch('/users/lista/remove',{id:id},{
+      const response = await API.patch(`/users/lista/remove/compra/${id}`,{
         headers:{
           token: store.token
         }
@@ -129,5 +144,6 @@ async function login(User) {
     getLista,
     getListaProducto,
     createListAdd,
-    updateListaRemove
+    updateListaRemoveCompra,
+    updateListaRemoveCasa
   }

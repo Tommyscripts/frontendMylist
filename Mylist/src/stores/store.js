@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core' // conecta piña con localStorage
-import api from '@/services/api'
+
 
 export const useAuthStore = defineStore('auth', {
   state: () => {
