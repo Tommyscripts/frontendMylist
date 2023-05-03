@@ -33,13 +33,14 @@
             </v-card-item>
           </v-card-title>
         </v-card>
+
       </v-col>
-      <v-row id="btn">
+    </v-row>
+    <v-row id="btn">
         <v-btn rounded color="#375B83" @click="retroceder()">
           <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
         </v-btn>
       </v-row>
-    </v-row>
   </v-container>
 </template>
 
