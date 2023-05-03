@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="8" sm="4" v-for="(congelado, idx) in congelados" :key="idx">
-        <v-card class="color">
+      <v-col cols="12" md="4" sm="6" v-for="(congelado, idx) in congelados" :key="idx">
+        <v-card  id="color">
           <v-card-title class="d-flex">
             <v-avatar>
               <v-img :src="congelado.img"> </v-img>
@@ -34,12 +34,12 @@
           </v-card-title>
         </v-card>
       </v-col>
-      <v-row id="btn">
+    </v-row>
+    <v-row id="btn">
         <v-btn rounded color="#375B83" @click="retroceder()">
           <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
         </v-btn>
       </v-row>
-    </v-row>
   </v-container>
 </template>
 
@@ -68,7 +68,6 @@ export default {
       }
     });
     const user = await api.getUser();
-    console.log(user);
     this.lists = user.listas;
   },
   methods: {
@@ -127,8 +126,8 @@ export default {
 };
 </script>
   
-  <style>
-  .color{
+  <style scoped>
+  #color{
       background-color: #415A9B;
       color: white;
   }

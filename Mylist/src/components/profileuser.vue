@@ -1,33 +1,24 @@
 <template>
   <v-container>
-    <v-row class="pa-10">
-      <v-col cols="12" md="8" sm="4" class="mx-auto">
+    <v-row class="pa-5">
+      <v-col cols="12"   class="mx-auto">
         <v-row>
           <v-spacer></v-spacer>
-          <v-col cols="12" md="8" sm="4" class="mx-auto">
-            <v-sheet> Nombre de usuario: <br />{{ users.username }} </v-sheet>
+          <v-col cols="12"   class="mx-auto" >
+            <v-sheet class="colores"> Bienvenido/a: {{ users.username }} </v-sheet>
           </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="12" md="8" sm="4" class="mx-auto">
-            <v-sheet> Email: <br />{{ users.email }} </v-sheet>
-          </v-col>
-          <v-spacer></v-spacer>
         </v-row>
         <Listas />
       </v-col>
     </v-row>
     <v-col>
-      <v-row id="btn">
-        <v-btn rounded color="#375B83" @click="retroceder()">
+      <v-row >
+        <v-btn class="ml-4" rounded color="#375B83" @click="retroceder()">
           <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
         </v-btn>
- 
-      </v-row>
-      <v-row id="btn">
-        <v-btn rounded color="#375B83" @click="borrarCuenta()">
+        <v-btn class="ml-4" rounded color="#375B83" @click="borrarCuenta()">
           <a id="colores"
-            ><v-icon>mdi-close-octagon-outline</v-icon> Eliminar Cuenta</a
-          >
+            ><v-icon>mdi-close-octagon-outline</v-icon> Eliminar Cuenta</a>
         </v-btn>
       </v-row>
     </v-col>
@@ -63,14 +54,22 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.colores{
+  background-color: #363b6a;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-size: calc(16px+1vw);
+  font-weight: bold;
+}
 #text {
   font-family: "Montserrat", sans-serif;
   font-size: calc(16px+1vw);
   font-weight: bold;
 }
-#btn {
+.btn {
   justify-content: space-between;
+  margin-left: 5px;
   display: contents;
 }
 </style>

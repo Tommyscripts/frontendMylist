@@ -1,5 +1,7 @@
 <template>
-  <v-col cols="12" sm="7" class="mt-10 mx-auto">
+  <v-container>
+    <v-row>
+      <v-col cols="12" sm="7" class="mt-10 mx-auto">
     <v-text-field
       label="Img"
       :rules="rules"
@@ -34,6 +36,10 @@
       Añadir</v-btn
     >
   </v-col>
+
+    </v-row>
+  </v-container>
+  
 </template>
 
 <script>
