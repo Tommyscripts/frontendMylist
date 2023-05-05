@@ -32,6 +32,7 @@
 
 <script>
 import api from "../services/api.js";
+import lista from "../services/list.js"
 
 export default {
   data() {
@@ -78,7 +79,7 @@ export default {
     },
     async eliminar(id, idx) {
       try {
-        const removed = await api.removeProductFromList(this.compra._id, id);
+        const removed = await lista.delteProductoById(this.compra._id, id);
         console.log(`Producto eliminado de la lista de compra: ${id}`);
         this.compra.productos.splice(idx, 1);
         this.$emit("productoEliminado", id);
