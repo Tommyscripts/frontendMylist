@@ -1,7 +1,7 @@
 <template>
 <v-container>
     <v-row>
-        <v-col cols="12" md="4" sm="6">
+        <v-col>
 
         </v-col>
     </v-row>
@@ -16,13 +16,16 @@
 </template>
 
 <script>
-    export default {
-        name: "Button",
+export default {
+    name: "Button",
         methods: {
     retroceder() {
       this.$router.go(-1);
     },
 }
-        
-    }
+}
 </script>
+
+<style lang="scss" scoped>
+
+</style>

@@ -25,6 +25,7 @@ import Limpieza from "../views/LimpiezaView.vue";
 import ListaDeCasa from "../views/ListaDeCasaView.vue";
 import ListaDeLaCompra from "../views/ListaDeLaCompraView.vue";
 import ConfirmarBorrarCuenta from "../views/confirmarEliminarcuentaView.vue";
+import DespedidaBorrarCuenta from "../views/despedidaEliminarCuentaView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -151,6 +152,11 @@ const router = createRouter({
       name: "ConfirmarEliminar",
       component: ConfirmarBorrarCuenta
     },
+    {
+      path: "/Despedida",
+      name:"Despedida",
+      component: DespedidaBorrarCuenta
+    }
   ],
 });
 

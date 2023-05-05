@@ -39,7 +39,7 @@ export default {
       this.$router.go(-1);
     },
     borrarCuenta() {
-      this.$router.push({ name: "delete" });
+      this.$router.push({ name: "ConfirmarEliminar" });
     },
   },
   data() {
