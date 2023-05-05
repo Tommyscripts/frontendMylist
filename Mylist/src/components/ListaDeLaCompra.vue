@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="4" sm="6" v-for="(producto,idx) in compra.productos" :key="idx">
-        <v-card-title class="color">{{ producto.name }} </v-card-title>
-        <v-card-item class="color2" style="display:flex; justify-content:space-between; align-items:center;">
+      <v-col cols="12" md="4" sm="6" >
+        <v-card-title class="color"> Lista de compra </v-card-title>
+        <v-card-item class="color2" v-for="(producto,idx) in compra.productos" :key="idx" style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center;">
             <v-avatar>
               <v-img :src="producto.img">
