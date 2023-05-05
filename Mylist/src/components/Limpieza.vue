@@ -86,7 +86,7 @@ export default {
 
   // Buscar el producto en la lista
   let productoExistente = listaEncontrada.productos.find(
-    (producto) => producto === id
+    (producto) => producto._id === id
   );
 
   // Verificar si el producto ya existe en alguna de las dos últimas listas
@@ -94,11 +94,11 @@ export default {
   if (name !== "Todos los productos") {
     const casa = this.lists.find((el) => el.name === "Lista de casa");
     const compra = this.lists.find((el) => el.name === "Lista de compra");
-    if (casa && casa.productos.includes(id)) {
+    if (casa && casa.productos.find((producto) => producto._id === id)) {
       alert(`El producto ya se encuentra en la lista "Productos de casa"`);
       productoExistenteEnOtraLista = true;
     }
-    if (compra && compra.productos.includes(id)) {
+    if (compra && compra.productos.find((producto) => producto._id === id)) {
       alert(`El producto ya se encuentra en la lista "Productos de compra"`);
       productoExistenteEnOtraLista = true;
     }
@@ -121,6 +121,7 @@ export default {
   alert("El producto ha sido agregado a la lista");
   return respond;
 }
+
 
   },
 };
