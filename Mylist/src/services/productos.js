@@ -30,7 +30,7 @@ async function addProduct() {
   }
   async function deleteProductById(id) {
     try {
-      const response = await API.get(`/productos/products/${id}`);
+      const response = await API.delete(`/productos/products/${id}`);
       return response.data;
     } catch (error) {
       return { error: error.message };

@@ -1,61 +1,87 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="4" sm="6" >
-        <v-card-title class="color">{{ compra.name }} </v-card-title>
-        <v-card-item v-for="(producto,idx) in compra.productos" :key="idx" class="color2">
-          <v-avatar>
-            <v-img :src="producto.img">
-            </v-img>
-          </v-avatar>
-          {{ producto.name }}
-          <v-btn class="ml-4" rounded color="#375B83" @click="removeProducto(producto._id)" > <a id="colores">Comprado </a> </v-btn>
+      <v-col cols="12" md="4" sm="6" v-for="(producto,idx) in compra.productos" :key="idx">
+        <v-card-title class="color">{{ producto.name }} </v-card-title>
+        <v-card-item class="color2" style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center;">
+            <v-avatar>
+              <v-img :src="producto.img">
+              </v-img>
+            </v-avatar>
+            <span>{{ producto.name }}</span>
+          </div>
+          <div>
+            <v-btn color="#375B83" class="mr-2" v-if="!producto.comprado" @click="comprar(producto._id, idx)">
+              <span style="color:white">Comprado</span>
+            </v-btn>
+            <v-btn color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id, idx)">
+              <v-icon color="red">mdi-close</v-icon>
+            </v-btn>
+          </div>
         </v-card-item>
       </v-col>
     </v-row>
     <v-row id="btn">
-        <v-btn rounded color="#375B83" @click="retroceder()">
-          <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-        </v-btn>
-      </v-row>
+      <v-btn rounded color="#375B83" @click="retroceder()">
+        <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
+      </v-btn>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import api from "../services/api.js";
+
 export default {
   data() {
     return {
       lists: [],
-      compra:{},
+      compra: {},
     };
   },
   async created() {
     const result = await api.getUser();
     this.lists = result.listas;
     this.lists.filter((el) => {
-        if (el.name === "Lista de compra") {
-          this.compra=el
-        }
-      });
+      if (el.name === "Lista de compra") {
+        this.compra = el;
+      }
+    });
   },
   methods: {
     retroceder() {
       this.$router.go(-1);
     },
-    async removeProducto(id) {
+    async comprar(id, idx) {
       try {
-        // Elimina el producto de la lista de casa
-        const removed = await api.updateListaRemoveCompra(id);
-        console.log(
-          `Producto eliminado de la lista de casa: ${id}`
+        const productoIndex = this.compra.productos.findIndex(
+          (producto) => producto._id === id
         );
+        const producto = this.compra.productos[productoIndex];
+        if (producto.comprado) {
+          return;
+        }
+        const removed = await api.updateListaRemoveCompra(id);
+        console.log(`Producto eliminado de la lista de casa`);
 
-        // Agrega el producto a la lista de compra
-         const added = await api.createListAdd(id);
-         console.log(`Producto agregado a la lista de compra: ${id}`);
+        const added = await api.createListAdd(id);
+        alert(`Producto agregado a la lista de compra`);
 
-        return { removed };
+        this.compra.productos[productoIndex].comprado = true;
+        this.$emit("productoComprado", id);
+        this.compra.productos.splice(idx, 1);
+
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async eliminar(id, idx) {
+      try {
+        const removed = await api.removeProductFromList(this.compra._id, id);
+        console.log(`Producto eliminado de la lista de compra: ${id}`);
+        this.compra.productos.splice(idx, 1);
+        this.$emit("productoEliminado", id);
       } catch (error) {
         console.error(error);
       }
@@ -65,15 +91,15 @@ export default {
 </script>
 
 <style scoped>
-.color{
+.color {
   background-color: #8d9342;
   color: white;
 }
-.color2{
+.color2 {
   background-color: #696d31;
   color: white;
 }
-#colores{
-  color:white;
+#colores {
+  color: white;
 }
 </style>

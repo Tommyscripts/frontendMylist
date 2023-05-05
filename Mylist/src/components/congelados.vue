@@ -1,8 +1,14 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="4" sm="6" v-for="(congelado, idx) in congelados" :key="idx">
-        <v-card  id="color">
+      <v-col
+        cols="12"
+        md="4"
+        sm="6"
+        v-for="(congelado, idx) in congelados"
+        :key="idx"
+      >
+        <v-card id="color">
           <v-card-title class="d-flex">
             <v-avatar>
               <v-img :src="congelado.img"> </v-img>
@@ -36,10 +42,10 @@
       </v-col>
     </v-row>
     <v-row id="btn">
-        <v-btn rounded color="#375B83" @click="retroceder()">
-          <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-        </v-btn>
-      </v-row>
+      <v-btn rounded color="#375B83" @click="retroceder()">
+        <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
+      </v-btn>
+    </v-row>
   </v-container>
 </template>
 
@@ -86,7 +92,7 @@ export default {
 
   // Buscar el producto en la lista
   let productoExistente = listaEncontrada.productos.find(
-    (producto) => producto === id
+    (producto) => producto._id === id
   );
 
   // Verificar si el producto ya existe en alguna de las dos últimas listas
@@ -94,11 +100,11 @@ export default {
   if (name !== "Todos los productos") {
     const casa = this.lists.find((el) => el.name === "Lista de casa");
     const compra = this.lists.find((el) => el.name === "Lista de compra");
-    if (casa && casa.productos.includes(id)) {
+    if (casa && casa.productos.find((producto) => producto._id === id)) {
       alert(`El producto ya se encuentra en la lista "Productos de casa"`);
       productoExistenteEnOtraLista = true;
     }
-    if (compra && compra.productos.includes(id)) {
+    if (compra && compra.productos.find((producto) => producto._id === id)) {
       alert(`El producto ya se encuentra en la lista "Productos de compra"`);
       productoExistenteEnOtraLista = true;
     }
@@ -125,10 +131,10 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
-  #color{
-      background-color: #415A9B;
-      color: white;
-  }
-  </style>
+
+<style scoped>
+#color {
+  background-color: #415a9b;
+  color: white;
+}
+</style>
