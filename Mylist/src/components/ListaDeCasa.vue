@@ -6,15 +6,23 @@
         <v-card-item
           v-for="(producto, idx) in casa.productos"
           :key="idx"
+          class="d-flex align-center justify-space-between"
           id="color2"
         >
-          <v-avatar>
-            <v-img :src="producto.img"> </v-img>
-          </v-avatar>
-          {{ producto.name }}
-          <v-btn class="ml-4" rounded color="#375B83" @click="removeProducto(producto._id)">
-            <a id="colores">No me queda</a>
-          </v-btn>
+          <div class="d-flex align-center">
+            <v-avatar>
+              <v-img :src="producto.img"></v-img>
+            </v-avatar>
+            <span class="ml-2">{{ producto.name }}</span>
+          </div>
+          <div>
+            <v-btn rounded color="#375B83" @click="removeProducto(producto._id)">
+              No me queda
+            </v-btn>
+            <v-btn icon @click="eliminarProducto(producto._id)">
+              <v-icon color="error">mdi-close</v-icon>
+            </v-btn>
+          </div>
         </v-card-item>
       </v-col>
     </v-row>
@@ -22,7 +30,7 @@
     <v-row>
       <v-col>
         <v-btn rounded color="#375B83" @click="retroceder()">
-          <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
+          <v-icon>mdi-arrow-left</v-icon> Back
         </v-btn>
       </v-col>
     </v-row>
@@ -31,6 +39,7 @@
 
 <script>
 import api from "../services/api.js";
+import producto from "../services/productos.js"
 export default {
   data() {
     return {
@@ -56,14 +65,21 @@ export default {
       try {
         // Elimina el producto de la lista de casa
         const removed = await api.updateListaRemoveCasa(id);
-        console.log(
-          `Producto eliminado de la lista de casa: ${id}`
-        );
+        console.log(`Producto eliminado de la lista de casa: ${id}`);
 
         // Agrega el producto a la lista de compra
          const added = await api.createListAdd(id);
          console.log(`Producto agregado a la lista de compra: ${id}`);
 
+        return { removed };
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async eliminarProducto(id) {
+      try {
+        const removed = await producto.deleteProductById(id, this.casa._id);
+        console.log(`Producto eliminado de la lista de casa: ${id}`);
         return { removed };
       } catch (error) {
         console.error(error);
@@ -80,9 +96,6 @@ export default {
 }
 #color2 {
   background-color: #3e7554;
-  color: white;
-}
-#colores {
   color: white;
 }
 </style>
