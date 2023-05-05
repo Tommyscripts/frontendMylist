@@ -44,7 +44,15 @@ async function getList() {
 
   async function deleteList(id) {
     try {
-      const response = await API.get(`/list/${id}`);
+      const response = await API.delete(`/list/${id}`);
+      return response.data;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  async function delteProductoById(id) {
+    try {
+      const response = await API.delete(`/list/producto${id}`);
       return response.data;
     } catch (error) {
       return { error: error.message };
@@ -55,6 +63,7 @@ async function getList() {
     getList,
     createList,
     updateList,
-    deleteList
+    deleteList,
+    delteProductoById
 
   }

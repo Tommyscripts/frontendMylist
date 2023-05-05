@@ -16,10 +16,10 @@
             <span class="ml-2">{{ producto.name }}</span>
           </div>
           <div>
-            <v-btn rounded color="#375B83" @click="removeProducto(producto._id)">
+            <v-btn rounded color="#375B83" @click="removeProducto(producto._id); $emit('producto-eliminado', producto)">
               No me queda
             </v-btn>
-            <v-btn icon @click="eliminarProducto(producto._id)">
+            <v-btn icon @click="eliminarProducto(producto._id); $emit('producto-eliminado', producto)">
               <v-icon color="error">mdi-close</v-icon>
             </v-btn>
           </div>
@@ -39,7 +39,7 @@
 
 <script>
 import api from "../services/api.js";
-import producto from "../services/productos.js"
+import lista from "../services/list.js"
 export default {
   data() {
     return {
@@ -69,7 +69,10 @@ export default {
 
         // Agrega el producto a la lista de compra
          const added = await api.createListAdd(id);
-         console.log(`Producto agregado a la lista de compra: ${id}`);
+         alert(`Producto agregado a la lista de compra`);
+
+         // Elimina el producto de la lista sin necesidad de actualizar la página
+         this.casa.productos = this.casa.productos.filter(p => p._id !== id);
 
         return { removed };
       } catch (error) {
@@ -78,8 +81,12 @@ export default {
     },
     async eliminarProducto(id) {
       try {
-        const removed = await producto.deleteProductById(id, this.casa._id);
-        console.log(`Producto eliminado de la lista de casa: ${id}`);
+        const removed = await lista.delteProductoById(id, this.casa._id);
+        console.log(`Producto eliminado de la lista de casa`);
+
+        // Elimina el producto de la lista sin necesidad de actualizar la página
+        this.casa.productos = this.casa.productos.filter(p => p._id !== id);
+
         return { removed };
       } catch (error) {
         console.error(error);
