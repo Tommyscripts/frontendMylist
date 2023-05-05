@@ -21,9 +21,10 @@ import Salsas from "../views/SalsasView.vue";
 import Encurtidos from "../views/EncurtidosView.vue";
 import CafeyAzucar from "../views/CafeyAzucarView.vue";
 import Bolleria from "../views/BolleriaView.vue";
-import Limpieza from "../views/LimpiezaView.vue"
-import ListaDeCasa from "../views/ListaDeCasaView.vue"
-import ListaDeLaCompra from "../views/ListaDeLaCompraView.vue"
+import Limpieza from "../views/LimpiezaView.vue";
+import ListaDeCasa from "../views/ListaDeCasaView.vue";
+import ListaDeLaCompra from "../views/ListaDeLaCompraView.vue";
+import ConfirmarBorrarCuenta from "../views/confirmarEliminarcuentaView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -138,18 +139,18 @@ const router = createRouter({
       name: "bolleria",
       component: Bolleria,
     },
-    { path: "/limpieza", 
-      name: "limpieza", 
-      component: Limpieza 
+    { path: "/limpieza", name: "limpieza", component: Limpieza },
+    { path: "/listadecasa", name: "listadecasa", component: ListaDeCasa },
+    {
+      path: "/listadelacompra",
+      name: "listadelacompra",
+      component: ListaDeLaCompra,
     },
-    { path: "/listadecasa", 
-    name: "listadecasa", 
-    component: ListaDeCasa
-  },
-  { path: "/listadelacompra",  
-  name: "listadelacompra", 
-  component: ListaDeLaCompra
-},
+    {
+      path: "/ConfirmarEliminar",
+      name: "ConfirmarEliminar",
+      component: ConfirmarBorrarCuenta
+    },
   ],
 });
 
