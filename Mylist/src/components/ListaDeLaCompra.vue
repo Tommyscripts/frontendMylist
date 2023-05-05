@@ -15,7 +15,7 @@
             <v-btn color="#375B83" class="mr-2" v-if="!producto.comprado" @click="comprar(producto._id, idx)">
               <span style="color:white">Comprado</span>
             </v-btn>
-            <v-btn color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id, idx)">
+            <v-btn icon color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id, idx)">
               <v-icon color="red">mdi-close</v-icon>
             </v-btn>
           </div>
