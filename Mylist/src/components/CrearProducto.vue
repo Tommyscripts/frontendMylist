@@ -74,6 +74,7 @@ export default {
         "Café y azúcar",
         "Bollería",
         "Limpieza",
+        "Bebidas"
       ],
     };
   },
