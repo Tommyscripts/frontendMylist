@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="4" sm="6" v-for="(producto,idx) in compra.productos" :key="idx">
-        <v-card-title class="color">{{ producto.name }} </v-card-title>
-        <v-card-item class="color2" style="display:flex; justify-content:space-between; align-items:center;">
+      <v-col cols="12" md="4" sm="6" >
+        <v-card-title class="color"> Lista de compra </v-card-title>
+        <v-card-item class="color2" v-for="(producto,idx) in compra.productos" :key="idx" style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center;">
             <v-avatar>
               <v-img :src="producto.img">
@@ -15,7 +15,7 @@
             <v-btn color="#375B83" class="mr-2" v-if="!producto.comprado" @click="comprar(producto._id, idx)">
               <span style="color:white">Comprado</span>
             </v-btn>
-            <v-btn color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id, idx)">
+            <v-btn icon color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id)">
               <v-icon color="red">mdi-close</v-icon>
             </v-btn>
           </div>
@@ -32,6 +32,7 @@
 
 <script>
 import api from "../services/api.js";
+import lista from "../services/list.js"
 
 export default {
   data() {
@@ -76,12 +77,15 @@ export default {
         console.error(error);
       }
     },
-    async eliminar(id, idx) {
+    async eliminar(id) {
       try {
-        const removed = await api.removeProductFromList(this.compra._id, id);
-        console.log(`Producto eliminado de la lista de compra: ${id}`);
-        this.compra.productos.splice(idx, 1);
-        this.$emit("productoEliminado", id);
+        const removed = await lista.delteProductoById(id, this.compra._id);
+        console.log(`Producto eliminado de la lista de casa`);
+
+        // Elimina el producto de la lista sin necesidad de actualizar la página
+        this.compra.productos = this.compra.productos.filter(p => p._id !== id);
+
+        return { removed };
       } catch (error) {
         console.error(error);
       }
