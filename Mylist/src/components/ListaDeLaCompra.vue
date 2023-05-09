@@ -15,7 +15,7 @@
             <v-btn color="#375B83" class="mr-2" v-if="!producto.comprado" @click="comprar(producto._id, idx)">
               <span style="color:white">Comprado</span>
             </v-btn>
-            <v-btn icon color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id, idx)">
+            <v-btn icon color="#FFFFFF" class="ml-2" fab small @click="eliminar(producto._id)">
               <v-icon color="red">mdi-close</v-icon>
             </v-btn>
           </div>
@@ -77,12 +77,15 @@ export default {
         console.error(error);
       }
     },
-    async eliminar(id, idx) {
+    async eliminar(id) {
       try {
-        const removed = await lista.delteProductoById(this.compra._id, id);
-        console.log(`Producto eliminado de la lista de compra: ${id}`);
-        this.compra.productos.splice(idx, 1);
-        this.$emit("productoEliminado", id);
+        const removed = await lista.delteProductoById(id, this.compra._id);
+        console.log(`Producto eliminado de la lista de casa`);
+
+        // Elimina el producto de la lista sin necesidad de actualizar la página
+        this.compra.productos = this.compra.productos.filter(p => p._id !== id);
+
+        return { removed };
       } catch (error) {
         console.error(error);
       }

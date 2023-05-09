@@ -50,9 +50,9 @@ async function getList() {
       return { error: error.message };
     }
   }
-  async function delteProductoById(id) {
+  async function delteProductoById(list, id) {
     try {
-      const response = await API.delete(`/list/producto${id}`);
+      const response = await API.delete(`list/${id}/producto/${list}`);
       return response.data;
     } catch (error) {
       return { error: error.message };

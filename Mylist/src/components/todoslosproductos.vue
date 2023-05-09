@@ -135,6 +135,12 @@ export default {
           img: "https://cdn-icons-png.flaticon.com/512/994/994928.png",
           route: "/limpieza",
         },
+        {
+          name: "Bebidas",
+          color: "bebidas",
+          img: "https://cdn-icons-png.flaticon.com/512/2405/2405597.png",
+          route: "/bebidas",
+        },
       ],
     };
   },
@@ -205,5 +211,9 @@ export default {
 .limpieza {
   background-color: #bc419a;
   color: white;
+}
+.bebidas {
+  background-color: #2d5971;
+  color:white
 }
 </style>
