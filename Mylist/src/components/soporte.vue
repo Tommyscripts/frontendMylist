@@ -10,7 +10,7 @@
             <v-label for="Nombre">Nombre</v-label>
             <v-textarea
               placeholder="Escribe aqui tu nombre"
-              class="bg-green"
+             
               type="name"
               name="name"
               id="formulario"
@@ -20,7 +20,7 @@
             <v-textarea
               placeholder="Escribe aqui tu correo"
               type="email"
-              class="bg-green"
+              
               name="email"
               id="formulario"
             ></v-textarea>
@@ -29,8 +29,8 @@
               type="comments"
               name="comments"
               method="POST"
-              class="bg-green"
-              placeholder="Puede clickar en el correo para mandarme un email, o rellenar este campo y darle al boton enviar. Además de tener mi github y mi linkedin."
+              
+              placeholder="Escribe tu mensaje aquí."
               variant="outlined"
             ></v-textarea>
             <v-btn
