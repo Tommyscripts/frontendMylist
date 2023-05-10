@@ -39,6 +39,7 @@ export default {
     return {
       lists: [],
       compra: {},
+      casa: "",
     };
   },
   async created() {
@@ -47,6 +48,11 @@ export default {
     this.lists.filter((el) => {
       if (el.name === "Lista de compra") {
         this.compra = el;
+      }
+    });
+    this.lists.filter((el) => {
+      if (el.name === "Lista de casa") {
+        this.casa = el._id;
       }
     });
   },
@@ -63,16 +69,16 @@ export default {
         if (producto.comprado) {
           return;
         }
-        const removed = await api.updateListaRemoveCompra(id);
+        const removed = await api.updateListaRemoveCompra(this.compra._id, id);
         console.log(`Producto eliminado de la lista de casa`);
 
-        const added = await api.createListAdd(id);
+        const added = await api.createListAdd(this.casa, id);
         
 
         this.compra.productos[productoIndex].comprado = true;
         this.$emit("productoComprado", id);
         this.compra.productos.splice(idx, 1);
-
+        return (removed, added)
       } catch (error) {
         console.error(error);
       }

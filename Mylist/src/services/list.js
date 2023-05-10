@@ -3,7 +3,7 @@ import { useAuthStore } from '../stores/store'
 
 
 const API = axios.create({
-  baseURL: 'https://my-home-list.onrender.com/api/list',
+  baseURL: 'http://localhost:3000/api/list',
   headers: {token: localStorage.getItem('token')}
 })
 

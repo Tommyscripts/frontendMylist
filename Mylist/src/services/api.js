@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../stores/store";
 
 const API = axios.create({
-  baseURL: "https://my-home-list.onrender.com/api",
+  baseURL: "http://localhost:3000/api",
   headers: { token: localStorage.getItem("token") },
 });
 
@@ -109,11 +109,11 @@ async function createListAdd(list, info) {
   }
 }
 
-async function updateListaRemoveCasa(id) {
+async function updateListaRemoveCasa(lista, id, compra) {
   const store = useAuthStore();
   console.log(id);
   try {
-    const response = await API.patch(`/users/lista/remove/${id}`, {
+    const response = await API.patch(`/users/lista/${lista}/remove/${id}/${compra}`, {
       headers: {
         token: store.token,
       },
@@ -124,10 +124,10 @@ async function updateListaRemoveCasa(id) {
   }
 }
 
-async function updateListaRemoveCompra(id) {
+async function updateListaRemoveCompra(lista, id) {
   const store = useAuthStore();
   try {
-    const response = await API.patch(`/users/lista/remove/compra/${id}`, {
+    const response = await API.patch(`/users/lista/${lista}/remove/compra/${id}`, {
       headers: {
         token: store.token,
       },
