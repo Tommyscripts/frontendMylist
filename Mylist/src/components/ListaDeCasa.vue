@@ -69,12 +69,12 @@ export default {
 
         // Agrega el producto a la lista de compra
          const added = await api.createListAdd(id);
-         alert(`Producto agregado a la lista de compra`);
+         alert(`Producto agregado a la lista de casa`);
 
          // Elimina el producto de la lista sin necesidad de actualizar la página
          this.casa.productos = this.casa.productos.filter(p => p._id !== id);
 
-        return { removed };
+        return  removed ;
       } catch (error) {
         console.error(error);
       }
