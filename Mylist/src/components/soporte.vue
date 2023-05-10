@@ -10,7 +10,7 @@
             <v-label for="Nombre">Nombre</v-label>
             <v-textarea
               placeholder="Escribe aqui tu nombre"
-             
+             class="bg-white"
               type="name"
               name="name"
               id="formulario"
@@ -20,7 +20,7 @@
             <v-textarea
               placeholder="Escribe aqui tu correo"
               type="email"
-              
+              class="bg-white"
               name="email"
               id="formulario"
             ></v-textarea>
@@ -29,7 +29,7 @@
               type="comments"
               name="comments"
               method="POST"
-              
+              class="bg-white"
               placeholder="Escribe tu mensaje aquí."
               variant="outlined"
             ></v-textarea>
