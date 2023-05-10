@@ -45,6 +45,7 @@ export default {
     return {
       lists: [],
       casa: {},
+      compra: "",
     };
   },
   async created() {
@@ -53,6 +54,11 @@ export default {
     this.lists.filter((el) => {
       if (el.name === "Lista de casa") {
         this.casa = el;
+      }
+    });
+    this.lists.filter((el) => {
+      if (el.name === "Lista de compra") {
+        this.compra = el._id;
       }
     });
   },
@@ -64,17 +70,17 @@ export default {
     async removeProducto(id) {
       try {
         // Elimina el producto de la lista de casa
-        const removed = await api.updateListaRemoveCasa(id);
+        const removed = await api.updateListaRemoveCasa(this.casa._id,id,this.compra);
         console.log(`Producto eliminado de la lista de casa: ${id}`);
 
         // Agrega el producto a la lista de compra
-         const added = await api.createListAdd(id);
+         const added = await api.createListAdd(this.compra,id);
       
 
          // Elimina el producto de la lista sin necesidad de actualizar la página
          this.casa.productos = this.casa.productos.filter(p => p._id !== id);
 
-        return  removed ;
+        return  (removed,added );
       } catch (error) {
         console.error(error);
       }
