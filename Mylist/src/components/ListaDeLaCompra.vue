@@ -67,7 +67,7 @@ export default {
         console.log(`Producto eliminado de la lista de casa`);
 
         const added = await api.createListAdd(id);
-        alert(`Producto agregado a la lista de compra`);
+        
 
         this.compra.productos[productoIndex].comprado = true;
         this.$emit("productoComprado", id);
