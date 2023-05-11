@@ -46,9 +46,6 @@
       <v-divider></v-divider>
       <br>
       <br>
-      <v-btn rounded color="#375B83"  @click="retroceder()">
-        <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-      </v-btn>
     </div>
         </v-col>
       </v-row>
@@ -64,11 +61,6 @@
   import api from "../services/api";
   export default {
     name: "HomeView",
-    methods: {
-      retroceder() {
-        this.$router.go(-1);
-      },
-    },
     data(){
       return {
         store:useAuthStore()
