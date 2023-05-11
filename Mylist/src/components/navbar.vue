@@ -43,7 +43,6 @@
                 Profile
               </v-list-item>
               <v-divider></v-divider>
-
               <v-list-item rounded dark @click="logout()">
                 Log Out
               </v-list-item>
@@ -74,10 +73,18 @@ export default {
       this.$router.push({ name: "home" });
     },
   },
-  async created() {
-    const rol = await api.getUser();
-    this.role = rol.role;
-  },
+  async getUserData() {
+  try {
+    const userData = await api.getUser();
+    this.role = userData.role;
+    this.isLoading = false;
+    window.location.reload(); // Recargar la página después de iniciar sesión
+  } catch (error) {
+    // Manejo de errores, por ejemplo, mostrar un mensaje de error
+    console.error('Error al obtener los datos del usuario:', error);
+  }
+},
+
   watch: {
     group() {
       this.drawer = false;
