@@ -19,9 +19,6 @@
       <v-divider></v-divider>
       <br>
       <br>
-      <v-btn rounded color="#375B83"  @click="retroceder()">
-        <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-      </v-btn>
     </div>
     <div v-else id="colores">
      <a id="text" class="d-flex justify-center">Bienvenido/a</a>
