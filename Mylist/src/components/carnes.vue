@@ -125,7 +125,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 #color {
   background-color: #bb6a3d;
