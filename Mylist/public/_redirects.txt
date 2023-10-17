@@ -1,2 +1,2 @@
-/*    /index.html   200
-/*    /index.html   404
+/*    /App.vue   200
+/*    /App.vue   404
