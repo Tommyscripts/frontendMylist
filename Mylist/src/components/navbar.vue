@@ -33,7 +33,7 @@
                 Login
               </v-list-item>
             </div>
-            <div v-if="store.isLoggedIn && role === auth">
+            <div v-if="store.isLoggedIn && role === 'admin' ">
               <v-list-item rounded dark :to="{ name: 'admin' }">
                 Admin Site
               </v-list-item>
