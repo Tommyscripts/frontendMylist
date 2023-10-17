@@ -64,7 +64,7 @@ export default {
     drawer: false,
     group: null,
     store: useAuthStore(),
-    role: "admin",
+    role: "",
     auth: "admin",
   }),
   methods: {
