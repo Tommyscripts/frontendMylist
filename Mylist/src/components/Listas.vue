@@ -4,10 +4,12 @@
       <v-col cols="12" v-for="(list, idx) in lists" :key="idx">
         <v-card class="mx-auto" max-width="344" :class="list.color" :to="list.route">
           <v-card-title>
-            {{ list.name }}
-            <v-avatar>
-              <v-img :src="list.img"> </v-img>
-            </v-avatar>
+            <div class="d-flex align-center">
+              <v-avatar>
+                <v-img :src="list.img"> </v-img>
+              </v-avatar>
+              <span class="font-size-adjust">{{ list.name }}</span>
+            </div>
           </v-card-title>
         </v-card>
       </v-col>
@@ -19,10 +21,6 @@
 import api from "../services/list.js";
 
 export default {
-/*async created() {
-    const result = await api.getList();
-    this.listas = result;
-  },*/
   data() {
     return {
       listas: [],
@@ -31,19 +29,19 @@ export default {
           name: "Todos los productos",
           color: "red",
           img: "https://cdn-icons-png.flaticon.com/512/1312/1312307.png",
-          route:"/categorias",
+          route: "/categorias",
         },
         {
           name: "Lista de compra",
           color: "blue",
           img: "https://cdn-icons-png.flaticon.com/512/2203/2203183.png",
-          route:"/listadelacompra"
+          route: "/listadelacompra",
         },
         {
           name: "Lista de casa",
           color: "green",
           img: "https://cdn-icons-png.flaticon.com/512/619/619153.png",
-          route:"/listadecasa"
+          route: "/listadecasa",
         },
       ],
     };
@@ -68,5 +66,8 @@ export default {
 .green {
   background-color: #3e7554;
   color: white;
+}
+.font-size-adjust {
+  font-size: 14px; /* Ajusta el tamaño de fuente según tu preferencia */
 }
 </style>
