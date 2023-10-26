@@ -2,84 +2,85 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="10" md="6" class="mx-auto">
-        <v-card class="mt-10">
-          <v-card-title>
-            Signup
-          </v-card-title>
-
+        <v-card class="pa-4 ma-4 fondo">
+          <v-card-title>Signup</v-card-title>
           <v-text-field
+            class="custom-input"
             label="Nombre"
             placeholder="Nombre"
+            v-model="newUser.name"
             filled
             rounded
             dense
-            v-model="newUser.name"
           ></v-text-field>
           <v-text-field
+            class="custom-input"
             label="Username"
             placeholder="Username"
+            v-model="newUser.username"
             filled
             rounded
             dense
-            v-model="newUser.username"
           ></v-text-field>
           <v-text-field
+            class="custom-input"
             label="Email"
             placeholder="Email"
             :rules="emailRules"
+            v-model="newUser.email"
             filled
             rounded
             dense
-            v-model="newUser.email"
           ></v-text-field>
           <v-text-field
+            class="custom-input"
             label="Password"
             :type="visible ? 'text' : 'password'"
             :rules="passwordRules"
             placeholder="Password"
+            v-model="newUser.password"
             filled
             rounded
             dense
             :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="visible = !visible"
-            v-model="newUser.password"
           ></v-text-field>
           <v-text-field
+            class="custom-input"
             label="Confirmar Password"
             :type="visible ? 'text' : 'password'"
             :rules="passwordRules"
             placeholder="Password"
+            v-model="newUser.confirmPassword"
             filled
             rounded
             dense
             :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="visible = !visible"
-            v-model="newUser.confirmPassword"
-          ></v-text-field>
+            @click:append="visible = !visible">
+          </v-text-field>
           <v-card-actions>
             <v-btn
               elevation="2"
               color="#001D3D"
-              class="amber--text text--darken-1"
+              class="custom-button"
               rounded
               dark
-              @click="signupUser()"
+              @click="retroceder"
             >
-              <v-icon color="#40667B">mdi-check</v-icon>
-              Aceptar
+              <v-icon class="custom-icon" color="rgb(75, 142, 38)">mdi-arrow-left</v-icon>
+              <span style="color: rgb(75, 142, 38);">Volver</span>
             </v-btn>
-          </v-card-actions>
-          <v-card-actions>
+            <v-spacer></v-spacer>
             <v-btn
               elevation="2"
-              color="#40667B"
-              class="amber--text text--darken-1"
+              color="#001D3D"
+              class="custom-button"
               rounded
               dark
-              @click="retroceder()"
+              @click="signupUser"
             >
-              <v-icon color="#40667B" class="mr-1">mdi-arrow-left</v-icon>
-              Volver
+              <v-icon class="custom-icon" color="rgb(75, 142, 38)">mdi-check</v-icon>
+              <span style="color: rgb(75, 142, 38);">Aceptar</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -111,7 +112,7 @@ export default {
         username: "",
         email: "",
         password: "",
-        confirmPassword: "", // Nuevo campo para la confirmación de contraseña
+        confirmPassword: "",
       },
       authStore: useAuthStore(),
     };
@@ -123,7 +124,7 @@ export default {
     async signupUser() {
       if (this.newUser.password !== this.newUser.confirmPassword) {
         alert("Las contraseñas no coinciden");
-        return; // Detén el proceso de registro si las contraseñas no coinciden
+        return;
       }
 
       const response = await api.signup(this.newUser);
@@ -138,4 +139,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.fondo {
+  background-color: rgba(58, 55, 108, 0.7);
+}
+
+.custom-input {
+  background-color: rgba(58, 55, 108, 0.7);
+  color: white;
+}
+
+.custom-button {
+  background-color: #001D3D;
+}
+
+.custom-icon {
+  color: rgb(75, 142, 38);
+}
+</style>
