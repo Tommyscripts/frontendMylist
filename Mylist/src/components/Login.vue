@@ -3,8 +3,9 @@
     <v-row>
       <v-col cols="12" sm="10" md="6" class="mx-auto">
         <v-card class="pa-4 ma-4 fondo">
-          <v-card-title>Login</v-card-title>
+          <v-card-title style="color: rgb(75, 142, 38);">Login</v-card-title>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Email"
             placeholder="Email"
@@ -15,6 +16,7 @@
             @keydown.enter.prevent="userLogin"
           ></v-text-field>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Password"
             :type="visible ? 'text' : 'password'"

@@ -3,8 +3,9 @@
     <v-row>
       <v-col cols="12" sm="10" md="6" class="mx-auto">
         <v-card class="pa-4 ma-4 fondo">
-          <v-card-title>Signup</v-card-title>
+          <v-card-title style="color: rgb(75, 142, 38);">Signup</v-card-title>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Nombre"
             placeholder="Nombre"
@@ -14,6 +15,7 @@
             dense
           ></v-text-field>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Username"
             placeholder="Username"
@@ -23,6 +25,7 @@
             dense
           ></v-text-field>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Email"
             placeholder="Email"
@@ -33,6 +36,7 @@
             dense
           ></v-text-field>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Password"
             :type="visible ? 'text' : 'password'"
@@ -46,6 +50,7 @@
             @click:append="visible = !visible"
           ></v-text-field>
           <v-text-field
+          style="color: rgb(75, 142, 38);"
             class="custom-input"
             label="Confirmar Password"
             :type="visible ? 'text' : 'password'"
