@@ -1,82 +1,82 @@
 <template>
   <v-container>
-    <v-row >
-    <v-col cols="12" sm="10" md="6" class="mx-auto">
-      <v-card class="pa-4 ma-4">
-        <v-card-title>Login</v-card-title>
-        <v-text-field
-          label="Email"
-          placeholder="Email"
-          v-model="email"
-          filled
-          rounded
-          dense
-          @keydown.enter.prevent="userLogin"
-        ></v-text-field>
-        <v-text-field
-          label="Password"
-          :type="visible ? 'text' : 'password'"
-          placeholder="Password"
-          v-model="password"
-          filled
-          rounded
-          dense
-          :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="visible = !visible"
-          @keydown.enter.prevent="userLogin"
-        ></v-text-field>
-        <v-card-actions>
-          <v-btn
-            elevation="2"
-            color="#001D3D"
-            class="amber--text text--darken-1"
+    <v-row>
+      <v-col cols="12" sm="10" md="6" class="mx-auto">
+        <v-card class="pa-4 ma-4 fondo">
+          <v-card-title>Login</v-card-title>
+          <v-text-field
+            class="custom-input"
+            label="Email"
+            placeholder="Email"
+            v-model="email"
+            filled
             rounded
-            dark
-            @click="userLogin"
-          >
-            <v-icon color="#40667B"> mdi-check </v-icon>
-            Aceptar
-          </v-btn>
-          <v-spacer></v-spacer>
-
-          <RouterLink :to="{ name: 'signup' }" style="text-decoration: none">
+            dense
+            @keydown.enter.prevent="userLogin"
+          ></v-text-field>
+          <v-text-field
+            class="custom-input"
+            label="Password"
+            :type="visible ? 'text' : 'password'"
+            placeholder="Password"
+            v-model="password"
+            filled
+            rounded
+            dense
+            :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="visible = !visible"
+            @keydown.enter.prevent="userLogin"
+          ></v-text-field>
+          <v-card-actions>
             <v-btn
               elevation="2"
               color="#001D3D"
-              class="amber--text text--darken-1"
+              class="custom-button"
               rounded
               dark
+              @click="userLogin"
             >
-              <v-icon color="#40667B"> mdi-account-outline </v-icon>
-              Nueva Cuenta
+              <v-icon class="custom-icon">mdi-check</v-icon>
+              <span style="color: rgb(75, 142, 38);">Aceptar</span>
             </v-btn>
-          </RouterLink>
-        </v-card-actions>
-        <v-card-actions>
-          <v-btn
-            elevation="2"
-            color="#001D3D"
-            class="amber--text text--darken-1"
-            rounded
-            dark
-            @click="retroceder()"
-          >
-            <v-icon color="#40667B" class="mr-1"> mdi-arrow-left</v-icon>
-            Volver
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
-
+            <v-spacer></v-spacer>
+            <RouterLink :to="{ name: 'signup' }" style="text-decoration: none">
+              <v-btn
+                elevation="2"
+                color="#001D3D"
+                class="custom-button"
+                rounded
+                dark
+              >
+                <v-icon class="custom-icon">mdi-account-outline</v-icon>
+                <span style="color: rgb(75, 142, 38);">Nueva Cuenta</span>
+              </v-btn>
+            </RouterLink>
+          </v-card-actions>
+          <v-card-actions>
+            <v-btn
+              elevation="2"
+              color="#001D3D"
+              class="custom-button"
+              rounded
+              dark
+              @click="retroceder"
+            >
+              <v-icon class="custom-icon">mdi-arrow-left</v-icon>
+              <span style="color: rgb(75, 142, 38);">Volver</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
- 
 </template>
 
 <script>
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/store";
 import api from "../services/api";
+
 export default {
   data() {
     return {
@@ -84,7 +84,6 @@ export default {
       email: "",
       password: "",
       error: "",
-
       authStore: useAuthStore(),
     };
   },
@@ -108,3 +107,22 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.fondo {
+  background-color: rgba(58, 55, 108, 0.7);
+}
+
+.custom-input {
+  background-color: rgba(58, 55, 108, 0.7);
+  color: white;
+}
+
+.custom-button {
+  background-color: #001D3D;
+}
+
+.custom-icon {
+  color: rgb(75, 142, 38);
+}
+</style>

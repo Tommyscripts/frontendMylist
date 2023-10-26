@@ -26,7 +26,8 @@ import ListaDeCasa from "../views/ListaDeCasaView.vue";
 import ListaDeLaCompra from "../views/ListaDeLaCompraView.vue";
 import ConfirmarBorrarCuenta from "../views/confirmarEliminarcuentaView.vue";
 import DespedidaBorrarCuenta from "../views/despedidaEliminarCuentaView.vue";
-import Bebidas from "../views/BebidasView.vue"
+import Bebidas from "../views/BebidasView.vue";
+import auth from "../views/AuthOverlay.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -162,7 +163,12 @@ const router = createRouter({
       path: "/Bebidas",
       name:"bebidas",
       component: Bebidas
-    }
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: auth
+    }    
   ],
 });
 
