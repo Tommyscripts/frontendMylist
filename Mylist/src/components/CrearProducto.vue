@@ -7,19 +7,19 @@
       :rules="rules"
       hide-details="auto"
       v-model="newProducts.img"
-      class="bg-green"
+      style="color: rgb(75, 142, 38);"
     ></v-text-field>
     <v-text-field
       label="Name"
       :rules="rules"
       v-model="newProducts.name"
-      class="bg-green"
+      style="color: rgb(75, 142, 38);"
     ></v-text-field>
     <v-select
       label="Select"
       :items="categorias"
       v-model="newProducts.categorias"
-      class="bg-green"
+      style="color: rgb(75, 142, 38);"
     >
     </v-select>
     <v-btn
@@ -93,12 +93,12 @@ export default {
 </script>
 <style>
 #text {
-  color: #4ba435;
+  color: #5279d6;
   font-size: 3vh;
   font-weight: bold;
   text-align: justify;
 }
 #colores {
-  color: #4ba435;
+  color: #5279d6;
 }
 </style>
