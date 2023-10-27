@@ -8,6 +8,7 @@ const API = axios.create({
 
 async function getUser() {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.get("/users/profile", {
       headers: {
@@ -37,8 +38,10 @@ async function login(User) {
     return { error: error.message };
   }
 }
+
 async function deleteUser(remove) {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.delete("/users/profile", remove, {
       headers: {
@@ -51,8 +54,10 @@ async function deleteUser(remove) {
     return error;
   }
 }
+
 async function updateUser(newData) {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.put("/users/profile", newData, {
       headers: {
@@ -64,8 +69,10 @@ async function updateUser(newData) {
     return error;
   }
 }
+
 async function getLista() {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.get("/users/lista", {
       headers: {
@@ -77,8 +84,10 @@ async function getLista() {
     return error;
   }
 }
+
 async function getListaProducto() {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.get("/users/lista/producto", {
       headers: {
@@ -93,6 +102,7 @@ async function getListaProducto() {
 
 async function createListAdd(list, info) {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.patch(
       "/users/lista/add",
@@ -111,6 +121,7 @@ async function createListAdd(list, info) {
 
 async function updateListaRemoveCasa(lista, id, compra) {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   console.log(id);
   try {
     const response = await API.patch(`/users/lista/${lista}/remove/${id}/${compra}`, {
@@ -126,6 +137,7 @@ async function updateListaRemoveCasa(lista, id, compra) {
 
 async function updateListaRemoveCompra(lista, id) {
   const store = useAuthStore();
+  console.log("Token:", store.token);
   try {
     const response = await API.patch(`/users/lista/${lista}/remove/compra/${id}`, {
       headers: {
