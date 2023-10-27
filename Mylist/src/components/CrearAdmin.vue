@@ -117,14 +117,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bg-green {
-  background-color: #5279d6; /* Cambiar al color que deseas */
-  color: #5279d6; /* Cambiar al color que deseas */
+  background-color:  #001D3D; /* Cambiar al color que deseas */
+  color: #37da48; /* Cambiar al color que deseas */
 }
 
 .button-color {
-  background-color: #5279d6; /* Cambiar al color que deseas */
-  color: #5279d6; /* Cambiar al color que deseas */
+  background-color:  #001D3D; /* Cambiar al color que deseas */
+  color: #37da48; /* Cambiar al color que deseas */
 }
 </style>

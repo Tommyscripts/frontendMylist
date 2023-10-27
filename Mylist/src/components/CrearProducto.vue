@@ -2,44 +2,18 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="7" class="mt-10 mx-auto">
-    <v-text-field
-      label="Img"
-      :rules="rules"
-      hide-details="auto"
-      v-model="newProducts.img"
-      style="color: rgb(75, 142, 38);"
-    ></v-text-field>
-    <v-text-field
-      label="Name"
-      :rules="rules"
-      v-model="newProducts.name"
-      style="color: rgb(75, 142, 38);"
-    ></v-text-field>
-    <v-select
-      label="Select"
-      :items="categorias"
-      v-model="newProducts.categorias"
-      style="color: rgb(75, 142, 38);"
-    >
-    </v-select>
-    <v-btn
-      elevation="2"
-      color="#375B83"
-      rounded
-      dark
-      :rules="rules"
-      @click.prevent="addNewProduct"
-      @keydown.enter.prevent="addNewProduct"
-      id="colores"
-    >
-      <v-icon id="colores"> mdi-check </v-icon>
-      Añadir</v-btn
-    >
-  </v-col>
-
+        <v-text-field label="Img" :rules="rules" hide-details="auto" v-model="newProducts.img"
+          style="color: rgb(75, 142, 38);"></v-text-field>
+        <v-text-field label="Name" :rules="rules" v-model="newProducts.name"
+          style="color: rgb(75, 142, 38);"></v-text-field>
+        <v-select label="Select" :items="categorias" v-model="newProducts.categorias" style="color: rgb(75, 142, 38);">
+        </v-select>
+        <v-btn elevation="2" color="#375B83" rounded dark :rules="rules" @click.prevent="addNewProduct" @keydown.enter.prevent="addNewProduct" id="colores">
+        <v-icon> mdi-check </v-icon>
+             Añadir</v-btn>
+      </v-col>
     </v-row>
   </v-container>
-  
 </template>
 
 <script>
@@ -91,14 +65,17 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 #text {
-  color: #5279d6;
+  background-color: #001D3D;
+  color: #37da48;
   font-size: 3vh;
   font-weight: bold;
   text-align: justify;
 }
+
 #colores {
-  color: #5279d6;
+  background-color: #001D3D;
+  color: #37da48;
 }
 </style>
