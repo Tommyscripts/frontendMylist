@@ -14,42 +14,36 @@
         </v-list>
         <v-list nav dense>
           <v-list-item-group color="primary">
-            <v-list-item @click.prevent="setHome()">
+            <v-list-item @click.prevent="toggleOverlay('home')">
               <v-list-item-icon>
                 <v-icon rounded color="#375B83">mdi-shield-home</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title rounded color="#375B83"
-                  >Inicio</v-list-item-title
-                >
+                <v-list-item-title rounded color="#375B83">Inicio</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item @click.prevent="setAddProduct()">
+            <v-list-item @click.prevent="toggleOverlay('products')">
               <v-list-item-icon>
-                <v-icon rounded color="#375B83">mdi-store-plus</v-icon>
+                <v-icon color="#375B83" rounded dark>mdi-store-plus</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title rounded color="#375B83"
-                  >Añadir producto</v-list-item-title
-                >
+                <v-list-item-title rounded color="#375B83">Añadir producto</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item @click.prevent="setAdmin()">
+            <v-list-item @click.prevent="toggleOverlay('admin')">
               <v-list-item-icon rounded color="#375B83">
-                <v-icon rounded color="#375B83">mdi-security</v-icon>
+                <v-icon color="#375B83" rounded dark>mdi-security</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title rounded color="#375B83"
-                  >Set Admin</v-list-item-title
-                >
+                <v-list-item-title rounded color="#375B83">Set Admin</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <CrearProducto v-if="products" />
-        <CrearAdmin v-if="admin"></CrearAdmin>
+        <CrearProducto v-if="overlayOpen === 'products'" />
+        <CrearAdmin v-if="overlayOpen === 'admin'"></CrearAdmin>
         <v-row class="pa-10">
           <v-btn rounded color="#375B83" @click="retroceder()">
             <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
@@ -75,24 +69,13 @@ export default {
     return {
       user: "",
       email: "",
-      home: true,
-      products: false,
-      admin: false,
+      overlayOpen: "home", // Variable para rastrear el overlay abierto
       store: useAuthStore(),
     };
   },
   methods: {
-    setAddProduct() {
-      this.hoome = !this.home;
-      this.products = !this.products;
-    },
-    setHome() {
-      this.home = !this.home;
-      this.product = false;
-    },
-    setAdmin() {
-      this.admin = !this.admin;
-      this.home = false;
+    toggleOverlay(overlayName) {
+      this.overlayOpen = overlayName;
     },
     retroceder() {
       this.$router.go(-1);
