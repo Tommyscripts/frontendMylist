@@ -100,7 +100,7 @@ export default {
         alert("password or email wrong");
       } else {
         this.authStore.login(respond.token, respond.email);
-        this.$router.push({ name: "profile" });
+        this.$router.push({ name: "home" });
       }
     },
     retroceder() {
