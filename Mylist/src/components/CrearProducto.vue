@@ -91,7 +91,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 #text {
   color: #5279d6;
   font-size: 3vh;

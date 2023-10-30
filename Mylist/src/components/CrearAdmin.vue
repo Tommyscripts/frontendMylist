@@ -117,7 +117,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bg-green {
   background-color: #5279d6; /* Cambiar al color que deseas */
   color: #5279d6; /* Cambiar al color que deseas */

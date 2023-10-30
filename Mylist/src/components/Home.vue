@@ -66,9 +66,6 @@
   };
   </script>
   <style>
-  
-  
-  
   #text{
     color: #4ba435;
     font-size: 3vh;
