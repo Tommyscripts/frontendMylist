@@ -70,7 +70,7 @@ export default {
           return;
         }
         const removed = await api.updateListaRemoveCompra(this.compra._id, id);
-        console.log(`Producto eliminado de la lista de casa`);
+        (`Producto eliminado de la lista de casa`);
 
         const added = await api.createListAdd(this.casa, id);
         
@@ -86,7 +86,7 @@ export default {
     async eliminar(id) {
       try {
         const removed = await lista.delteProductoById(id, this.compra._id);
-        console.log(`Producto eliminado de la lista de casa`);
+        (`Producto eliminado de la lista de casa`);
 
         // Elimina el producto de la lista sin necesidad de actualizar la página
         this.compra.productos = this.compra.productos.filter(p => p._id !== id);

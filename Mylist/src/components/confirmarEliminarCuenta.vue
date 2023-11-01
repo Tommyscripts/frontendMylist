@@ -55,8 +55,8 @@ export default {
    const respond = await api.getLista()
    this.compra= respond[1]
    this.casa=respond[2]
-   console.log(this.compra)
-   console.log(this.casa)
+   (this.compra)
+   (this.casa)
    
  }
 

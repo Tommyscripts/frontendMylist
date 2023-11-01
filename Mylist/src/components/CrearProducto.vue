@@ -82,7 +82,7 @@ export default {
     async addNewProduct() {
       try {
         const response = await products.createProduct(this.newProducts);
-        console.log(this.newProducts);
+        (this.newProducts);
         return response, alert("El producto ha sido creado");
       } catch {
         alert("Error al crear el producto");
