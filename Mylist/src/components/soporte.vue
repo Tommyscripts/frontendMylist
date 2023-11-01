@@ -61,7 +61,7 @@ export default {
       emailjs
         .send('YOUR_EMAILJS_SERVICE_ID', 'template_276i72g', emailParams, 'YOUR_EMAILJS_USER_ID')
         .then((response) => {
-          console.log('Correo electrónico enviado:', response);
+        
           this.showSuccessOverlay = true; // Mostrar el overlay de éxito
         })
         .catch((error) => {
