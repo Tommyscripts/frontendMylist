@@ -23,9 +23,9 @@
       </v-col>
     </v-row>
     <v-row id="btn">
-      <v-btn rounded color="#375B83" @click="retroceder()">
-        <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
-      </v-btn>
+      <v-btn class="ml-4 mt-2" rounded color="#375B83" @click="retroceder">
+          <a id="colores"><v-icon>mdi-arrow-left</v-icon> Back</a>
+        </v-btn>
     </v-row>
   </v-container>
 </template>
@@ -109,7 +109,5 @@ export default {
   background-color: #696d31;
   color: white;
 }
-#colores {
-  color: white;
-}
+
 </style>
