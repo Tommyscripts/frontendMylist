@@ -135,13 +135,14 @@ export default {
     const indicatesCannotPatch = errText && errText.includes && errText.includes('Cannot PATCH')
     const isNotFound = status === 404 || indicatesCannotPatch
     console.debug('[eliminarProducto] removeSolo devolvió error', { removed, status, indicatesCannotPatch })
-    if (isNotFound) {
-      // Intento de respaldo: usar la ruta que acepta el id de la lista de compra
+      if (isNotFound) {
+      // Intento de respaldo: usar la ruta DELETE que borra el producto de la lista sin moverlo
       try {
-        await this.dialog.open({ title: 'Aviso', text: 'El servidor no soporta la ruta de eliminación directa; se usará ruta alternativa.', type: 'info', confirmText: 'Aceptar' })
-        removed = await api.updateListaRemoveCasa(this.casa._id, id, this.compra)
+        await this.dialog.open({ title: 'Aviso', text: 'El servidor no soporta la ruta de eliminación directa; se usará ruta alternativa (DELETE).', type: 'info', confirmText: 'Aceptar' })
+        // lista.delteProductoById espera (productId, listId) según comentarios en src/services/list.js
+        removed = await lista.delteProductoById(id, this.casa._id)
       } catch (errBackup) {
-        console.error('[eliminarProducto] fallo fallback removeCasa', errBackup)
+        console.error('[eliminarProducto] fallo fallback deleteProductoById', errBackup)
         const text = errBackup?.response ? `${errBackup.response.status} - ${JSON.stringify(errBackup.response.data)}` : errBackup.message || String(errBackup)
         await this.dialog.open({ title: 'Error al eliminar', text, type: 'error', confirmText: 'Aceptar' })
         delete this.busyIds[id]
