@@ -38,9 +38,15 @@ async function getList() {
   }
   async function delteProductoById(list, id) {
     try {
-    const response = await API.delete(`list/${id}/producto/${list}`);
+    // params: (productId, listId) — se llamaba con (id, this.casa._id)
+    // ruta correcta en backend: /users/lista/{listId}/producto/{productId}
+    const response = await API.delete(`/users/lista/${id}/producto/${list}`);
       return response.data;
     } catch (error) {
+      // Si axios proporciona response, incluimos status y url para diagnóstico
+      if (error && error.response) {
+        return { error: error.response.data || error.message, status: error.response.status, url: error.config && (error.config.url || error.config.baseURL + error.config.url) }
+      }
       return { error: error.message };
     }
   }

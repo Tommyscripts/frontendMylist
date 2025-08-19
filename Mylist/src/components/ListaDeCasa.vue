@@ -40,12 +40,15 @@
 <script>
 import api from "../services/api.js";
 import lista from "../services/list.js"
+import { useDialogStore } from '../stores/dialog'
+import { tryAddProductToList } from '../services/listUtils'
 export default {
   data() {
     return {
       lists: [],
       casa: {},
       compra: "",
+  dialog: useDialogStore(),
     };
   },
   async created() {
@@ -69,32 +72,48 @@ export default {
     },
     async removeProducto(id) {
       try {
-        // Elimina el producto de la lista de casa
-        const removed = await api.updateListaRemoveCasa(this.casa._id,id,this.compra);
+        // Primero intentar añadir en la lista destino; si ya existe, el helper mostrará el diálogo y devolverá error/indicador
+        const added = await tryAddProductToList(this.lists, 'Lista de compra', id, this.dialog)
+        if (!added || added.error) {
+          // Si no se añadió, no eliminamos de la lista de casa
+          return { error: added && added.error ? added.error : 'No se agreg el producto' }
+        }
 
-        // Agrega el producto a la lista de compra
-         const added = await api.createListAdd(this.compra,id);
-      
+        // Ahora eliminamos el producto de la lista de casa en el backend
+        const removed = await api.updateListaRemoveCasa(this.casa._id, id, this.compra);
 
-         // Elimina el producto de la lista sin necesidad de actualizar la página
-         this.casa.productos = this.casa.productos.filter(p => p._id !== id);
+        if (removed && removed.error) {
+          await this.dialog.open({ title: 'Error al mover producto', text: removed.error.toString(), type: 'error', confirmText: 'Aceptar' })
+          return { error: removed.error }
+        }
 
-        return  (removed,added );
+        // Actualizar UI local: eliminar producto de la lista de casa
+        this.casa.productos = this.casa.productos.filter(p => p._id !== id);
+
+        return { removed, added };
       } catch (error) {
         console.error(error);
+        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+        await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
     async eliminarProducto(id) {
       try {
-        const removed = await lista.delteProductoById(id, this.casa._id);
+        // Usar el endpoint PATCH existente para eliminar de lista de casa
+        const removed = await api.updateListaRemoveCasa(this.casa._id, id, this.compra);
 
+        if (removed && removed.error) {
+          await this.dialog.open({ title: 'Error al eliminar', text: removed.error.toString(), type: 'error', confirmText: 'Aceptar' })
+          return { error: removed.error }
+        }
 
-        // Elimina el producto de la lista sin necesidad de actualizar la página
+        // Actualizar UI local
         this.casa.productos = this.casa.productos.filter(p => p._id !== id);
-
         return { removed };
       } catch (error) {
         console.error(error);
+        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+        await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
   },

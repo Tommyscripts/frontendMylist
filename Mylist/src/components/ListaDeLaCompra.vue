@@ -33,6 +33,8 @@
 <script>
 import api from "../services/api.js";
 import lista from "../services/list.js"
+import { useDialogStore } from '../stores/dialog'
+import { tryAddProductToList } from '../services/listUtils'
 
 export default {
   data() {
@@ -40,6 +42,7 @@ export default {
       lists: [],
       compra: {},
       casa: "",
+  dialog: useDialogStore(),
     };
   },
   async created() {
@@ -69,22 +72,43 @@ export default {
         if (producto.comprado) {
           return;
         }
+
+        // Primero intentar añadir en la lista destino (Lista de casa)
+        const added = await tryAddProductToList(this.lists, 'Lista de casa', id, this.dialog)
+        if (!added || added.error) {
+          // Si no se añadió, no eliminamos de la lista de compra
+          return { error: added && added.error ? added.error : 'No se agreg\u00f3 el producto' }
+        }
+
+        // Ahora eliminar desde la lista de compra en el backend
         const removed = await api.updateListaRemoveCompra(this.compra._id, id);
 
-        const added = await api.createListAdd(this.casa, id);
-        
+        if (removed && removed.error) {
+          await this.dialog.open({ title: 'Error al mover producto', text: removed.error.toString(), type: 'error', confirmText: 'Aceptar' })
+          return { error: removed.error }
+        }
 
         this.compra.productos[productoIndex].comprado = true;
         this.$emit("productoComprado", id);
         this.compra.productos.splice(idx, 1);
-        return (removed, added)
+        return { removed, added }
       } catch (error) {
         console.error(error);
+        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+        await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
     async eliminar(id) {
       try {
-        const removed = await lista.delteProductoById(id, this.compra._id);
+        // Usar el endpoint PATCH existente para eliminar de lista de compra
+        const removed = await api.updateListaRemoveCompra(this.compra._id, id);
+
+        if (removed && removed.error) {
+          const extra = removed.status ? ` (${removed.status})` : ''
+          const url = removed.url ? `\nURL: ${removed.url}` : ''
+          await this.dialog.open({ title: 'Error al eliminar', text: `${removed.error}${extra}${url}`, type: 'error', confirmText: 'Aceptar' })
+          return { error: removed.error }
+        }
 
         // Elimina el producto de la lista sin necesidad de actualizar la página
         this.compra.productos = this.compra.productos.filter(p => p._id !== id);
@@ -92,6 +116,8 @@ export default {
         return { removed };
       } catch (error) {
         console.error(error);
+        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+        await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
   },
