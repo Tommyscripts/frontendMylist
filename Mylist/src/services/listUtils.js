@@ -12,9 +12,14 @@ const pendingAdds = new Map()
  * @param {Object} dialog - store/dialog con método open
  * @returns {Object|null} - el objeto agregado o null si no se agregó
  */
-export async function tryAddProductToList(lists, listName, productId, dialog) {
-  // Evitar llamadas concurrentes para el mismo producto (serializar adds a cualquier lista)
-  const key = String(productId)
+/**
+ * tryAddProductToList(lists, listName, productId, dialog, allowIfInOtherList=false)
+ * allowIfInOtherList: when true (used for explicit move actions), do not block if the product
+ * exists in the other list (origin); only block if it already exists in the destination.
+ */
+export async function tryAddProductToList(lists, listName, productId, dialog, allowIfInOtherList = false) {
+  // Evitar llamadas concurrentes para el mismo producto+lista (serializar adds por destino)
+  const key = `${listName}:${String(productId)}`
   if (pendingAdds.has(key)) {
     // Reutilizamos la misma promesa para evitar duplicados por doble-click
     try {
@@ -50,6 +55,23 @@ export async function tryAddProductToList(lists, listName, productId, dialog) {
     return null
   }
 
+  // helper para deduplicar arrays por id canónico
+  const uniqueById = (arr) => {
+    if (!Array.isArray(arr)) return arr
+    const seen = new Set()
+    const out = []
+    for (const it of arr) {
+      // key: preferred canonical id, fallback to JSON representation
+      const id = getId(it) || JSON.stringify(it)
+      if (!id) continue
+      if (!seen.has(id)) {
+        seen.add(id)
+        out.push(it)
+      }
+    }
+    return out
+  }
+
   let listaEncontrada = freshLists.find((l) => l.name === listName)
   if (!listaEncontrada) {
     await dialog.open({ title: 'Error', text: 'Lista no encontrada', type: 'error', confirmText: 'Aceptar' })
@@ -59,21 +81,28 @@ export async function tryAddProductToList(lists, listName, productId, dialog) {
   // Si el producto ya existe en la lista destino (comparando varios posibles campos)
   console.debug('[listUtils] listaEncontrada.productos sample', Array.isArray(listaEncontrada.productos) ? listaEncontrada.productos.slice(0,3) : listaEncontrada.productos)
   const existeEnDestino = Array.isArray(listaEncontrada.productos) && listaEncontrada.productos.find(p => getId(p) === String(productId))
-  // Comprobar en las dos listas principales usando freshLists
-  let encontradoEn = []
-  const casa = freshLists.find((el) => el.name === 'Lista de casa')
-  const compra = freshLists.find((el) => el.name === 'Lista de compra')
-  if (casa && Array.isArray(casa.productos) && casa.productos.find((p) => getId(p) === String(productId))) encontradoEn.push('Lista de casa')
-  if (compra && Array.isArray(compra.productos) && compra.productos.find((p) => getId(p) === String(productId))) encontradoEn.push('Lista de compra')
 
-  if (encontradoEn.length) {
-    // Mostrar un único diálogo que indique en qué lista(s) está
-    const texto = encontradoEn.length === 1
-      ? `El producto ya se encuentra en la lista "${encontradoEn[0]}"`
-      : `El producto ya se encuentra en las listas "${encontradoEn.join(' y ')}"`
-  await dialog.open({ title: 'Duplicado', text: texto, type: 'warning', confirmText: 'Aceptar' })
-  // Devolver un objeto de error para que los llamantes no procedan a eliminar desde la lista origen
-  return { error: 'duplicado', foundIn: encontradoEn }
+  // Si ya existe en la lista destino -> bloquear siempre
+  if (existeEnDestino) {
+    const texto = `El producto ya se encuentra en la lista "${listName}"`
+    await dialog.open({ title: 'Duplicado', text: texto, type: 'warning', confirmText: 'Aceptar' })
+    return { error: 'duplicado', foundIn: [listName] }
+  }
+
+  // Si no se permite añadir cuando el producto existe en la otra lista, comprobarla
+  if (!allowIfInOtherList) {
+    let encontradoEn = []
+    const casa = freshLists.find((el) => el.name === 'Lista de casa')
+    const compra = freshLists.find((el) => el.name === 'Lista de compra')
+    if (casa && Array.isArray(casa.productos) && casa.productos.find((p) => getId(p) === String(productId))) encontradoEn.push('Lista de casa')
+    if (compra && Array.isArray(compra.productos) && compra.productos.find((p) => getId(p) === String(productId))) encontradoEn.push('Lista de compra')
+    if (encontradoEn.length) {
+      const texto = encontradoEn.length === 1
+        ? `El producto ya se encuentra en la lista "${encontradoEn[0]}"`
+        : `El producto ya se encuentra en las listas "${encontradoEn.join(' y ')}"`
+      await dialog.open({ title: 'Duplicado', text: texto, type: 'warning', confirmText: 'Aceptar' })
+      return { error: 'duplicado', foundIn: encontradoEn }
+    }
   }
 
   // Creamos una promesa que realizará la operación y la guardamos en pendingAdds
@@ -92,12 +121,18 @@ export async function tryAddProductToList(lists, listName, productId, dialog) {
       // Asegurar array y añadir el objeto normalizado solo si no existe ya localmente
       if (!Array.isArray(listaEncontrada.productos)) listaEncontrada.productos = []
       const alreadyLocal = listaEncontrada.productos.find(p => getId(p) === String(productId))
-      if (!alreadyLocal && canonical) {
-        listaEncontrada.productos.push(canonical)
+      if (canonical) {
+        const canonicalId = getId(canonical)
+        const existingIds = new Set((listaEncontrada.productos || []).map(p => getId(p)).filter(Boolean))
+        if (!existingIds.has(canonicalId)) {
+          // asegurar campo cantidad por defecto y push
+          const itemToPush = { ...(canonical || {}), cantidad: (canonical && (canonical.cantidad || canonical.cantidad === 0)) ? canonical.cantidad : 1 }
+          listaEncontrada.productos.push(itemToPush)
+        }
       }
 
-  try { const toast = useToastStore(); toast.open('Añadido correctamente', 'success', 2000) } catch(e){}
-  return canonical || respond
+      try { const toast = useToastStore(); toast.open('Añadido correctamente', 'success', 2000) } catch(e){}
+      return canonical || respond
     } catch (e) {
       // Si falla la relectura, normalizamos la respuesta anterior lo mejor posible y la devolvemos
       let addedObj = null
@@ -108,11 +143,20 @@ export async function tryAddProductToList(lists, listName, productId, dialog) {
       } else {
         addedObj = respond
       }
+      // fallback: push solo si no existe localmente
       if (!Array.isArray(listaEncontrada.productos)) listaEncontrada.productos = []
       const alreadyLocal = listaEncontrada.productos.find(p => getId(p) === String(productId))
-      if (!alreadyLocal) listaEncontrada.productos.push(addedObj)
-  try { const toast = useToastStore(); toast.open('Añadido correctamente', 'success', 2000) } catch(e){}
-  return addedObj
+      if (!alreadyLocal) {
+        addedObj.cantidad = (addedObj && (addedObj.cantidad || addedObj.cantidad === 0)) ? addedObj.cantidad : 1
+        // comprobar por id robustamente antes de push
+        const addedId = getId(addedObj)
+        const existingIds = new Set((listaEncontrada.productos || []).map(p => getId(p)).filter(Boolean))
+        if (!existingIds.has(addedId)) listaEncontrada.productos.push(addedObj)
+      }
+      // limpiar duplicados por si acaso
+      listaEncontrada.productos = uniqueById(listaEncontrada.productos)
+      try { const toast = useToastStore(); toast.open('Añadido correctamente', 'success', 2000) } catch(e){}
+      return addedObj
     }
   })()
 

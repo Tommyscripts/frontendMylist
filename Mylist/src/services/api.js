@@ -96,9 +96,31 @@ async function updateListaRemoveCasa(lista, id, compra) {
   }
 }
 
+async function updateListaRemoveSolo(lista, id) {
+  try {
+    const response = await API.patch(`/users/lista/${lista}/remove/${id}`);
+    return response.data;
+  } catch (error) {
+    // Normalizar error para el cliente
+    if (error && error.response) {
+      return { error: error.response.data || error.message, status: error.response.status }
+    }
+    return { error: error.message || String(error) }
+  }
+}
+
 async function updateListaRemoveCompra(lista, id) {
   try {
     const response = await API.patch(`/users/lista/${lista}/remove/compra/${id}`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function updateListaProductoCantidad(lista, productoId, cantidad) {
+  try {
+    const response = await API.patch(`/users/lista/${lista}/producto/${productoId}/cantidad`, { cantidad });
     return response.data;
   } catch (error) {
     return error;
@@ -116,6 +138,8 @@ export default {
   createListAdd,
   updateListaRemoveCompra,
   updateListaRemoveCasa,
+  updateListaProductoCantidad,
+  updateListaRemoveSolo,
 };
 
 // también exportamos la instancia de axios para usos directos en otros servicios
