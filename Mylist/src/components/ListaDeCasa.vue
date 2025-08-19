@@ -124,16 +124,17 @@ export default {
       try {
   if (this.busyIds[id]) return
   this.busyIds[id] = true
-  // Intentamos eliminar usando la ruta 'solo' si existe
-  let removed = null
-  try {
-    removed = await api.updateListaRemoveSolo(this.casa._id, id);
-  } catch (errSolo) {
-    // Si la ruta no existe (404) o el servidor responde con html indicando "Cannot PATCH .../remove/...",
-    // hacemos un intento de fallback usando la ruta conocida `updateListaRemoveCasa`.
-    const status = errSolo && errSolo.response && errSolo.response.status
-    const isNotFound = status === 404 || (errSolo && typeof errSolo === 'string' && errSolo.includes('Cannot PATCH'))
-    console.debug('[eliminarProducto] fallo removeSolo, status:', status, 'err:', errSolo)
+  // Intentamos eliminar usando la ruta 'solo' si existe. Nota: las funciones en api.js
+  // normalizan errores y pueden devolver un objeto { error, status } en lugar de lanzar.
+  let removed = await api.updateListaRemoveSolo(this.casa._id, id);
+
+  // Si la respuesta indica error, comprobamos si es 404 / "Cannot PATCH" y hacemos fallback
+  if (removed && removed.error) {
+    const status = removed.status || (removed.error && removed.error.status) || null
+    const errText = typeof removed.error === 'string' ? removed.error : JSON.stringify(removed.error)
+    const indicatesCannotPatch = errText && errText.includes && errText.includes('Cannot PATCH')
+    const isNotFound = status === 404 || indicatesCannotPatch
+    console.debug('[eliminarProducto] removeSolo devolvió error', { removed, status, indicatesCannotPatch })
     if (isNotFound) {
       // Intento de respaldo: usar la ruta que acepta el id de la lista de compra
       try {
@@ -147,17 +148,10 @@ export default {
         return { error: text }
       }
     } else {
-      const text = errSolo?.response ? `${errSolo.response.status} - ${JSON.stringify(errSolo.response.data)}` : errSolo.message || String(errSolo)
-      await this.dialog.open({ title: 'Error al eliminar', text, type: 'error', confirmText: 'Aceptar' })
+      await this.dialog.open({ title: 'Error al eliminar', text: errText, type: 'error', confirmText: 'Aceptar' })
       delete this.busyIds[id]
-      return { error: text }
+      return { error: errText }
     }
-  }
-
-  if (removed && removed.error) {
-    await this.dialog.open({ title: 'Error al eliminar', text: removed.error.toString(), type: 'error', confirmText: 'Aceptar' })
-    delete this.busyIds[id]
-    return { error: removed.error }
   }
 
   // Actualizar UI local
