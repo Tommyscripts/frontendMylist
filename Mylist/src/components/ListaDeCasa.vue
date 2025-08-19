@@ -9,15 +9,6 @@
               <v-img :src="producto.img"></v-img>
             </v-avatar>
             <span class="ml-2">{{ producto.name }}</span>
-            <v-text-field
-              v-model.number="producto.cantidad"
-              type="number"
-              min="1"
-              class="cantidad-input"
-              dense
-              hide-details
-              @change="updateCantidad(producto._id, producto.cantidad)"
-            />
           </div>
           <div>
             <v-btn rounded color="#375B83" @click="removeProducto(producto._id); $emit('producto-eliminado', producto)">
@@ -55,6 +46,7 @@ export default {
       casa: {},
       compra: "",
   busyIds: {},
+  cantidadTimers: {},
   dialog: useDialogStore(),
   toast: useToastStore(),
     };
@@ -176,61 +168,46 @@ export default {
       try {
   if (this.busyIds[id]) return
   this.busyIds[id] = true
-  // Intentamos eliminar usando la ruta 'solo' si existe. Nota: las funciones en api.js
-  // normalizan errores y pueden devolver un objeto { error, status } en lugar de lanzar.
-  let removed = await api.updateListaRemoveSolo(this.casa._id, id);
+  // Intentamos eliminar usando la ruta 'solo' si existe.
+  let removed = null
+  try {
+    removed = await api.updateListaRemoveSolo(this.casa._id, id)
+  } catch (e) {
+    // normalizamos el error en removed para seguir el fallback
+    console.debug('[eliminarProducto] updateListaRemoveSolo threw', e)
+    removed = { error: e }
+  }
 
-  // Si la respuesta indica error, comprobamos si es 404 / "Cannot PATCH" y hacemos fallback
+  // Si la eliminación server-side falló o no existe, intentar DELETE fallback
   if (removed && removed.error) {
-    const status = removed.status || (removed.error && removed.error.status) || null
-    const errText = typeof removed.error === 'string' ? removed.error : JSON.stringify(removed.error)
-    const indicatesCannotPatch = errText && errText.includes && errText.includes('Cannot PATCH')
-    const isNotFound = status === 404 || indicatesCannotPatch
-    console.debug('[eliminarProducto] removeSolo devolvió error', { removed, status, indicatesCannotPatch })
-  if (isNotFound) {
-      // Intento de respaldo: usar la ruta DELETE que borra el producto de la lista sin moverlo
-        try {
-          // Informar por consola para diagnóstico
-          console.debug('[eliminarProducto] haciendo DELETE fallback ->', `/users/lista/${this.casa._id}/producto/${id}`)
-          removed = await lista.delteProductoById(id, this.casa._id)
-          // Si el fallback devolvió un objeto de error, aplicamos eliminación local automática y notificamos con toast
-          if (removed && removed.error) {
-            console.warn('[eliminarProducto] DELETE fallback devolvió error', removed)
-            // Marcar localmente y actualizar UI
-            this._markLocallyRemoved(id)
-            this.casa.productos = this.casa.productos.filter(p => p._id !== id)
-            // Encolar reintento de eliminación en background
-            enqueueRemoval(this.casa._id, id)
-            this.toast.open('Producto eliminado localmente (se reintentará en servidor)', 'warning', 3000)
-            delete this.busyIds[id]
-            return { error: removed }
-          }
-        } catch (errBackup) {
-          console.error('[eliminarProducto] fallo fallback deleteProductoById', errBackup)
-          // En caso de error de bajo nivel (network), también aplicar eliminación local y notificar
-          this._markLocallyRemoved(id)
-          this.casa.productos = this.casa.productos.filter(p => p._id !== id)
-          enqueueRemoval(this.casa._id, id)
-          this.toast.open('Producto eliminado localmente (error de red al borrar en servidor). Reintentando en background', 'warning', 3000)
-          delete this.busyIds[id]
-          return { error: errBackup }
-        }
-    } else {
-      await this.dialog.open({ title: 'Error al eliminar', text: errText, type: 'error', confirmText: 'Aceptar' })
-      delete this.busyIds[id]
-      return { error: errText }
+    console.debug('[eliminarProducto] removeSolo no disponible, intentando DELETE fallback')
+    try {
+      const delResp = await lista.delteProductoById(id, this.casa._id)
+      if (delResp && delResp.error) {
+        console.warn('[eliminarProducto] DELETE fallback devolvió error, marcando local y encolando', delResp)
+        this._markLocallyRemoved(id)
+        enqueueRemoval(this.casa._id, id)
+      }
+    } catch (errBackup) {
+      console.error('[eliminarProducto] fallo DELETE fallback', errBackup)
+      this._markLocallyRemoved(id)
+      enqueueRemoval(this.casa._id, id)
     }
   }
 
-    // Actualizar UI local
-  this.casa.productos = this.casa.productos.filter(p => p._id !== id);
+  // En cualquier caso, actualizar UI local y mostrar un único toast de confirmación
+  this.casa.productos = this.casa.productos.filter(p => p._id !== id)
+  this.toast.open('Producto eliminado', 'success', 2000)
   delete this.busyIds[id]
-  console.debug('[eliminarProducto] eliminado', { id, removed })
-  return { removed };
+  console.debug('[eliminarProducto] finalizado (local)', { id })
+  return { removed }
       } catch (error) {
-        console.error(error);
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
-        await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
+        console.error('[eliminarProducto] inesperado', error)
+        // Aun en error, informar de eliminación al usuario (fluidez), y encolar
+        this._markLocallyRemoved(id)
+        enqueueRemoval(this.casa._id, id)
+        this.casa.productos = this.casa.productos.filter(p => p._id !== id)
+        this.toast.open('Producto eliminado', 'success', 2000)
       }
     },
     // ----- Eliminaciones locales (fallback cuando el servidor no soporta DELETE) -----
@@ -277,6 +254,25 @@ export default {
         const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
+    },
+    onCantidadInput(producto, value) {
+      // No forzamos el valor para evitar asignar NaN (vuetify/v-model ya actualiza el modelo).
+      const id = String(producto._id)
+      if (this.cantidadTimers[id]) clearTimeout(this.cantidadTimers[id])
+      this.cantidadTimers[id] = setTimeout(async () => {
+        delete this.cantidadTimers[id]
+        // Preferir el valor del modelo (actualizado por v-model). Validar antes de enviar.
+        const val = Number(producto.cantidad)
+        if (Number.isNaN(val)) {
+          console.debug('[onCantidadInput] valor no numérico, omitiendo guardado', producto.cantidad)
+          return
+        }
+        try {
+          await this.updateCantidad(producto._id, val)
+        } catch (e) {
+          console.debug('[onCantidadInput] update failed', e)
+        }
+      }, 700)
     },
   },
 };

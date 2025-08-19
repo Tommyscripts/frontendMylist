@@ -9,15 +9,6 @@
                     <v-img :src="producto.img" />
                   </v-avatar>
                   <span class="product-name ml-2">{{ producto.name }}</span>
-                  <v-text-field
-                    v-model.number="producto.cantidad"
-                    type="number"
-                    min="1"
-                    class="cantidad-input"
-                    dense
-                    hide-details
-                    @change="updateCantidad(producto._id, producto.cantidad)"
-                  />
                 </div>
           <div>
             <v-btn color="#375B83" class="mr-2" v-if="!producto.comprado" @click="comprar(producto._id, idx)">
@@ -51,6 +42,7 @@ export default {
       compra: {},
       casa: "",
   busyIds: {},
+  cantidadTimers: {},
   dialog: useDialogStore(),
     };
   },
@@ -161,6 +153,23 @@ export default {
         const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
+    },
+    onCantidadInput(producto, value) {
+      const id = String(producto._id)
+      if (this.cantidadTimers[id]) clearTimeout(this.cantidadTimers[id])
+      this.cantidadTimers[id] = setTimeout(async () => {
+        delete this.cantidadTimers[id]
+        const val = Number(producto.cantidad)
+        if (Number.isNaN(val)) {
+          console.debug('[onCantidadInput] valor no numérico, omitiendo guardado', producto.cantidad)
+          return
+        }
+        try {
+          await this.updateCantidad(producto._id, val)
+        } catch (e) {
+          console.debug('[onCantidadInput] update failed', e)
+        }
+      }, 700)
     },
   },
 };
