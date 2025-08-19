@@ -78,6 +78,8 @@
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/store";
 import api from "../services/api";
+import { useToastStore } from "../stores/toast";
+import { useDialogStore } from "../stores/dialog";
 
 export default {
   data() {
@@ -86,7 +88,9 @@ export default {
       email: "",
       password: "",
       error: "",
-      authStore: useAuthStore(),
+  authStore: useAuthStore(),
+  toast: useToastStore(),
+  dialog: useDialogStore(),
     };
   },
   methods: {
@@ -97,10 +101,15 @@ export default {
       };
       const respond = await api.login(user);
       if (respond.error) {
-        alert("password or email wrong");
+        await this.dialog.open({ title: 'Login fallido', text: 'Usuario o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.', type: 'error', confirmText: 'Aceptar' })
       } else {
+        // Guardar token en store y en localStorage para que el interceptor lo use
         this.authStore.login(respond.token, respond.email);
-        this.$router.push({ name: "home" });
+  try { localStorage.setItem('token', respond.token); } catch (e) {}
+        // Cargar datos del usuario (role, email actualizado) para actualizar la UI sin reload
+        await this.authStore.loadUser();
+  await this.dialog.open({ title: 'Bienvenido', text: 'Has iniciado sesión correctamente', type: 'success', confirmText: 'Ir a inicio' })
+  this.$router.push({ name: "home" });
       }
     },
     retroceder() {

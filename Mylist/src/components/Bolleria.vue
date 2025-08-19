@@ -47,6 +47,7 @@
 import producto from "../services/productos.js";
 import api from "../services/api.js";
 import listas from "../services/list.js";
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   name: "Button",
@@ -56,17 +57,20 @@ export default {
       bollerias: [],
       lists: [],
       idList: "",
+  dialog: useDialogStore(),
     };
   },
   async created() {
     // addProduct es un .get para mostrar los productos
     const result = await producto.addProduct();
-    this.productos = result;
-    this.productos.filter((el) => {
-      if (el.categorias === "Bollería") {
-        this.bollerias.push(el);
-      }
-    });
+    if (Array.isArray(result)) {
+      this.productos = result;
+      this.productos.forEach((el) => { if (el.categorias === "Bollería") this.bollerias.push(el) })
+    } else {
+      console.error('producto.addProduct no devolvió un array', result);
+      this.productos = [];
+      this.bollerias = [];
+    }
     const user = await api.getUser();
     this.lists = user.listas;
   },
@@ -94,14 +98,14 @@ export default {
   if (name !== "Todos los productos") {
     const casa = this.lists.find((el) => el.name === "Lista de casa");
     const compra = this.lists.find((el) => el.name === "Lista de compra");
-    if (casa && casa.productos.find((producto) => producto._id === id)) {
-      alert(`El producto ya se encuentra en la lista "Productos de casa"`);
-      productoExistenteEnOtraLista = true;
-    }
-    if (compra && compra.productos.find((producto) => producto._id === id)) {
-      alert(`El producto ya se encuentra en la lista "Productos de compra"`);
-      productoExistenteEnOtraLista = true;
-    }
+        if (casa && casa.productos.find((producto) => producto._id === id)) {
+          await this.dialog.open({ title: 'Duplicado', text: 'El producto ya se encuentra en la lista "Productos de casa"', type: 'warning' })
+          productoExistenteEnOtraLista = true;
+        }
+        if (compra && compra.productos.find((producto) => producto._id === id)) {
+          await this.dialog.open({ title: 'Duplicado', text: 'El producto ya se encuentra en la lista "Productos de compra"', type: 'warning' })
+          productoExistenteEnOtraLista = true;
+        }
   }
 
   // Si el producto ya existe en alguna de las dos últimas listas, retornar sin hacer nada más
@@ -111,14 +115,14 @@ export default {
 
   // Si el producto ya existe en la lista, mostrar mensaje de error
   if (productoExistente) {
-    alert(`El producto ya se encuentra en la lista`);
+        await this.dialog.open({ title: 'Producto duplicado', text: 'El producto ya se encuentra en la lista', type: 'warning' })
     return productoExistente;
   }
 
   // Si el producto no existe en la lista, agregarlo
   const respond = await api.createListAdd(listaEncontrada._id, id);
   listaEncontrada.productos.push(respond);
-  alert("El producto ha sido agregado a la lista");
+      await this.dialog.open({ title: 'Producto agregado', text: 'El producto ha sido agregado a la lista', type: 'success' })
   return respond;
 }
 

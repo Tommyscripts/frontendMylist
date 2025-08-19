@@ -97,6 +97,7 @@
 <script>
 import { useAuthStore } from "@/stores/store";
 import api from "@/services/api.js";
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   data() {
@@ -119,7 +120,8 @@ export default {
         password: "",
         confirmPassword: "",
       },
-      authStore: useAuthStore(),
+  authStore: useAuthStore(),
+  dialog: useDialogStore(),
     };
   },
   methods: {
@@ -128,17 +130,22 @@ export default {
     },
     async signupUser() {
       if (this.newUser.password !== this.newUser.confirmPassword) {
-        alert("Las contraseñas no coinciden");
+        await this.dialog.open({ title: 'Error', text: 'Las contraseñas no coinciden', type: 'error', confirmText: 'Aceptar' })
         return;
       }
 
       const response = await api.signup(this.newUser);
       if (response.error) {
-        alert("Error al crear cuenta");
-      } else {
-        this.authStore.login(response.token, response.email);
-        this.$router.push({ name: "home" });
+        await this.dialog.open({ title: 'Error', text: response.message || 'Error al crear cuenta. Revisa los datos e inténtalo de nuevo.', type: 'error', confirmText: 'Aceptar' })
+        return;
       }
+
+      // guardar token y cargar usuario
+      this.authStore.login(response.token, response.email)
+      try { localStorage.setItem('token', response.token) } catch(e) {}
+      await this.authStore.loadUser()
+      await this.dialog.open({ title: 'Cuenta creada', text: 'Tu cuenta se creó correctamente', type: 'success', confirmText: 'Ir a inicio' })
+      this.$router.push({ name: "home" });
     },
   },
 };

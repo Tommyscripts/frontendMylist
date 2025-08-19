@@ -47,6 +47,7 @@
 import producto from "../services/productos.js";
 import api from "../services/api.js";
 import listas from "../services/list.js";
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   name: "Button",
@@ -56,17 +57,20 @@ export default {
       lacteos: [],
       lists: [],
       idList: "",
+      dialog: useDialogStore(),
     };
   },
   async created() {
     // addProduct es un .get para mostrar los productos
     const result = await producto.addProduct();
-    this.productos = result;
-    this.productos.filter((el) => {
-      if (el.categorias === "Lacteos y huevos") {
-        this.lacteos.push(el);
-      }
-    });
+    if (Array.isArray(result)) {
+      this.productos = result;
+      this.productos.forEach((el) => { if (el.categorias === "Lacteos y huevos") this.lacteos.push(el) })
+    } else {
+      console.error('producto.addProduct no devolvió un array', result);
+      this.productos = [];
+      this.lacteos = [];
+    }
     const user = await api.getUser();
     this.lists = user.listas;
   },

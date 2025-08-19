@@ -1,11 +1,5 @@
-import axios from 'axios'
-import { useAuthStore } from '../stores/store'
-
-
-const API = axios.create({
-  baseURL: 'https://my-home-list.onrender.com/api',
-  headers: {token: localStorage.getItem('token')}
-})
+import apiModule, { axiosInstance as API } from './api'
+// ahora usamos el API central que ya inyecta token desde localStorage via interceptor
 
 async function addProduct() {
     try {
@@ -16,13 +10,8 @@ async function addProduct() {
     }
   }
   async function createProduct(newProducto) {
-    const store = useAuthStore();
     try {
-      const response = await API.post("/productos/products", newProducto, {
-        headers: {
-          token: store.token,
-        },
-      });
+      const response = await API.post("/productos/products", newProducto);
       return response.data;
     } catch (error) {
       return { error: error.message };

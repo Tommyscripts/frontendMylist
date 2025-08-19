@@ -62,13 +62,15 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    role: "",
   }),
 
   computed: {
     store() {
       return useAuthStore();
     },
+    role() {
+      return this.store.role
+    }
   },
 
   methods: {
@@ -80,11 +82,12 @@ export default {
       try {
         this.isLoading = true;
         const userData = await api.getUser();
-        this.role = userData.role; // Asegúrate de que "userData.role" sea la propiedad correcta que contiene el rol
+        // Actualiza la store directamente para que reactive las pestañas
+        if (userData && userData.role) this.store.role = userData.role
+        if (userData && userData.email) this.store.email = userData.email
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
-        // Manejo de errores, por ejemplo, mostrar un mensaje de error
         console.error('Error al obtener los datos del usuario:', error);
       }
     },
@@ -94,6 +97,13 @@ export default {
     group() {
       this.drawer = false;
     },
+    // cuando cambie el token/isLoggedIn en la store, recarga los datos de usuario
+    'store.token'(val) {
+      if (val) this.getUserData();
+      else {
+        this.store.role = null
+      }
+    }
   },
 
   created() {

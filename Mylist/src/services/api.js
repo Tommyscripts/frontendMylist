@@ -1,20 +1,22 @@
 import axios from "axios";
-import { useAuthStore } from "../stores/store";
 
 const API = axios.create({
   baseURL: "https://my-home-list.onrender.com/api",
-  headers: { token: localStorage.getItem("token") },
+});
+
+// Añadir interceptor para inyectar el token desde localStorage en cada petición
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    if (!config.headers) config.headers = {};
+    config.headers.token = token;
+  }
+  return config;
 });
 
 async function getUser() {
-  const store = useAuthStore();
-  
   try {
-    const response = await API.get("/users/profile", {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.get("/users/profile");
     return response.data;
   } catch (error) {
     return error;
@@ -40,14 +42,9 @@ async function login(User) {
 }
 
 async function deleteUser(remove) {
-  const store = useAuthStore();
   try {
-    const response = await API.delete("/users/profile", remove, {
-      headers: {
-        token: store.token,
-      },
-    });
-    store.logout();
+    // axios.delete acepta un objeto config como segundo parámetro; si necesitamos enviar body usar { data: remove }
+    const response = await API.delete("/users/profile", { data: remove });
     return response.data;
   } catch (error) {
     return error;
@@ -55,13 +52,8 @@ async function deleteUser(remove) {
 }
 
 async function updateUser(newData) {
-  const store = useAuthStore();
   try {
-    const response = await API.put("/users/profile", newData, {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.put("/users/profile", newData);
     return response.data;
   } catch (error) {
     return error;
@@ -69,13 +61,8 @@ async function updateUser(newData) {
 }
 
 async function getLista() {
-  const store = useAuthStore();
   try {
-    const response = await API.get("/users/lista", {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.get("/users/lista");
     return response.data;
   } catch (error) {
     return error;
@@ -83,13 +70,8 @@ async function getLista() {
 }
 
 async function getListaProducto() {
-  const store = useAuthStore();
   try {
-    const response = await API.get("/users/lista/producto", {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.get("/users/lista/producto");
     return response.data;
   } catch (error) {
     return error;
@@ -97,17 +79,8 @@ async function getListaProducto() {
 }
 
 async function createListAdd(list, info) {
-  const store = useAuthStore();
   try {
-    const response = await API.patch(
-      "/users/lista/add",
-      { id: list, producto: info },
-      {
-        headers: {
-          token: store.token,
-        },
-      }
-    );
+    const response = await API.patch("/users/lista/add", { id: list, producto: info });
     return response.data;
   } catch (error) {
     return error;
@@ -115,13 +88,8 @@ async function createListAdd(list, info) {
 }
 
 async function updateListaRemoveCasa(lista, id, compra) {
-  const store = useAuthStore();
   try {
-    const response = await API.patch(`/users/lista/${lista}/remove/${id}/${compra}`, {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.patch(`/users/lista/${lista}/remove/${id}/${compra}`);
     return response.data;
   } catch (error) {
     return error;
@@ -129,13 +97,8 @@ async function updateListaRemoveCasa(lista, id, compra) {
 }
 
 async function updateListaRemoveCompra(lista, id) {
-  const store = useAuthStore();
   try {
-    const response = await API.patch(`/users/lista/${lista}/remove/compra/${id}`, {
-      headers: {
-        token: store.token,
-      },
-    });
+    const response = await API.patch(`/users/lista/${lista}/remove/compra/${id}`);
     return response.data;
   } catch (error) {
     return error;
@@ -154,3 +117,6 @@ export default {
   updateListaRemoveCompra,
   updateListaRemoveCasa,
 };
+
+// también exportamos la instancia de axios para usos directos en otros servicios
+export { API as axiosInstance };

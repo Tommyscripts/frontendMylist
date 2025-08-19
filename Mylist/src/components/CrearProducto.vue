@@ -18,6 +18,7 @@
 
 <script>
 import products from "../services/productos";
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   data() {
@@ -52,14 +53,18 @@ export default {
       ],
     };
   },
+  created() {
+    this.dialog = useDialogStore()
+  },
   methods: {
     async addNewProduct() {
       try {
         const response = await products.createProduct(this.newProducts);
 
-        return response, alert("El producto ha sido creado");
+        await this.dialog.open({ title: 'Producto creado', text: 'El producto ha sido creado', type: 'success', confirmText: 'Aceptar' })
+        return response;
       } catch {
-        alert("Error al crear el producto");
+        await this.dialog.open({ title: 'Error', text: 'Error al crear el producto', type: 'error', confirmText: 'Aceptar' })
       }
     },
   },

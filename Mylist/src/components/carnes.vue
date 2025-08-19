@@ -47,6 +47,8 @@
 import producto from "../services/productos.js";
 import api from "../services/api.js";
 import listas from "../services/list.js";
+import { useToastStore } from '../stores/toast'
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   name: "Button",
@@ -56,17 +58,25 @@ export default {
       carnes: [],
       lists: [],
       idList: "",
+  toast: useToastStore(),
+  dialog: useDialogStore(),
     };
   },
   async created() {
     // addProduct es un .get para mostrar los productos
     const result = await producto.addProduct();
-    this.productos = result;
-    this.productos.filter((el) => {
-      if (el.categorias === "Carnes") {
-        this.carnes.push(el);
-      }
-    });
+    // validar que result sea un array
+    if (Array.isArray(result)) {
+      this.productos = result;
+      this.productos.forEach((el) => {
+        if (el.categorias === "Carnes") this.carnes.push(el);
+      });
+    } else {
+      console.error('productos.addProduct no devolvió un array', result);
+      // manejar caso de error (por ejemplo, mostrar mensaje o dejar arrays vacíos)
+      this.productos = [];
+      this.carnes = [];
+    }
     const user = await api.getUser();
     this.lists = user.listas;
   },
@@ -111,14 +121,14 @@ export default {
 
   // Si el producto ya existe en la lista, mostrar mensaje de error
   if (productoExistente) {
-    alert(`El producto ya se encuentra en la lista`);
+    await this.dialog.open({ title: 'Producto duplicado', text: 'El producto ya se encuentra en la lista', type: 'warning', confirmText: 'Aceptar' })
     return productoExistente;
   }
 
   // Si el producto no existe en la lista, agregarlo
   const respond = await api.createListAdd(listaEncontrada._id, id);
   listaEncontrada.productos.push(respond);
-  alert("El producto ha sido agregado a la lista");
+  await this.dialog.open({ title: 'Producto agregado', text: 'El producto ha sido agregado a la lista', type: 'success', confirmText: 'Aceptar' })
   return respond;
 }
 

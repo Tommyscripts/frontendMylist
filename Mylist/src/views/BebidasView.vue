@@ -1,11 +1,11 @@
 <template>
-<v-cointainer>
+<v-container>
     <v-row>
         <v-col>
             <Bebidas></Bebidas>
         </v-col>
     </v-row>
-</v-cointainer>
+</v-container>
 </template>
 
 <script>

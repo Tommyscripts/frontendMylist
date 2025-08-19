@@ -76,6 +76,7 @@
 <script>
 import { useAuthStore } from "@/stores/store";
 import api from "@/services/api.js";
+import { useDialogStore } from '../stores/dialog'
 
 export default {
   data() {
@@ -98,7 +99,8 @@ export default {
         password: "",
         role: "admin",
       },
-      authStore: useAuthStore(),
+  authStore: useAuthStore(),
+  dialog: useDialogStore(),
     };
   },
   methods: {
@@ -106,10 +108,17 @@ export default {
       this.$router.go(-1);
     },
     async signupUser() {
+      // Si el campo de confirm password no existe (no vinculado) saltamos validación
+      if (this.newUser.password && this.newUser.confirmPassword && this.newUser.password !== this.newUser.confirmPassword) {
+        await this.dialog.open({ title: 'Error', text: 'Las contraseñas no coinciden', type: 'error', confirmText: 'Aceptar' })
+        return;
+      }
+
       const response = await api.signup(this.newUser);
       if (response.error) {
-        alert("Error al crear cuenta");
+        await this.dialog.open({ title: 'Error', text: 'Error al crear cuenta', type: 'error', confirmText: 'Aceptar' })
       } else {
+        await this.dialog.open({ title: 'Cuenta creada', text: 'Cuenta de administrador creada', type: 'success', confirmText: 'Aceptar' })
         this.$router.push({ name: "home" });
       }
     },
