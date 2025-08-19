@@ -1,0 +1,6 @@
+{
+  "appId": "com.mycompany.mylist",
+  "appName": "MyList",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

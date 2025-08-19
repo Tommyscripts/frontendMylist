@@ -47,6 +47,7 @@
 import producto from "../services/productos.js";
 import api from "../services/api.js";
 import listas from "../services/list.js";
+import { tryAddProductToList } from '../services/listUtils'
 import { useToastStore } from '../stores/toast'
 import { useDialogStore } from '../stores/dialog'
 
@@ -79,59 +80,13 @@ export default {
     this.lists = user.listas;
   },
   methods: {
-    retroceder() {
-      this.$router.go(-1);
-    },
-    async agregarProducto(name, id) {
-  let listaEncontrada;
-
-  // Buscar la lista por su nombre
-  this.lists.forEach((el) => {
-    if (el.name === name) {
-      listaEncontrada = el;
-    }
-  });
-
-  // Buscar el producto en la lista
-  let productoExistente = listaEncontrada.productos.find(
-    (producto) => producto._id === id
-  );
-
-  // Verificar si el producto ya existe en alguna de las dos últimas listas
-  let productoExistenteEnOtraLista = false;
-  if (name !== "Todos los productos") {
-    const casa = this.lists.find((el) => el.name === "Lista de casa");
-    const compra = this.lists.find((el) => el.name === "Lista de compra");
-    if (casa && casa.productos.find((producto) => producto._id === id)) {
-      await this.dialog.open({ title: 'Atención', text: 'El producto ya se encuentra en la lista "Productos de casa"', type: 'warning', confirmText: 'Aceptar' })
-      productoExistenteEnOtraLista = true;
-    }
-    if (compra && compra.productos.find((producto) => producto._id === id)) {
-      await this.dialog.open({ title: 'Atención', text: 'El producto ya se encuentra en la lista "Productos de compra"', type: 'warning', confirmText: 'Aceptar' })
-      productoExistenteEnOtraLista = true;
-    }
-  }
-
-  // Si el producto ya existe en alguna de las dos últimas listas, retornar sin hacer nada más
-  if (productoExistenteEnOtraLista) {
-    return productoExistente;
-  }
-
-  // Si el producto ya existe en la lista, mostrar mensaje de error
-  if (productoExistente) {
-    await this.dialog.open({ title: 'Producto duplicado', text: 'El producto ya se encuentra en la lista', type: 'warning', confirmText: 'Aceptar' })
-    return productoExistente;
-  }
-
-  // Si el producto no existe en la lista, agregarlo
-  const respond = await api.createListAdd(listaEncontrada._id, id);
-  listaEncontrada.productos.push(respond);
-  await this.dialog.open({ title: 'Producto agregado', text: 'El producto ha sido agregado a la lista', type: 'success', confirmText: 'Aceptar' })
-  return respond;
-}
-
-
+  retroceder() {
+    this.$router.go(-1);
   },
+  async agregarProducto(name, id) {
+    return await tryAddProductToList(this.lists, name, id, this.dialog)
+  }
+},
 };
 </script>
   
