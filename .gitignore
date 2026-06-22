@@ -1,0 +1,17 @@
+# JetBrains IDE files
+.idea/
+*.iml
+
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+
+# macOS
+.DS_Store
+
+# VSCode settings (keep extensions recommendation)
+.vscode/
+!.vscode/extensions.json
