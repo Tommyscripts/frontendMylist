@@ -2,14 +2,19 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: "https://my-home-list.onrender.com/api",
+  timeout: 15000,
 });
 
-// Añadir interceptor para inyectar el token desde localStorage en cada petición
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    if (!config.headers) config.headers = {};
-    config.headers.token = token;
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+      delete config.headers.token;
+    }
+  } catch (error) {
+    // Storage unavailable; ignore silently.
   }
   return config;
 });
