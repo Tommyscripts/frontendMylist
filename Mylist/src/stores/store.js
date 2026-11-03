@@ -7,8 +7,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => {
     return {
       token: useStorage('token', null),
-      email: useStorage('email', null)
-      ,
+      email: useStorage('email', null),
       role: useStorage('role', null)
     }
   },
@@ -25,6 +24,13 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.email = null
       this.role = null
+      try {
+        localStorage.removeItem('token')
+        localStorage.removeItem('email')
+        localStorage.removeItem('role')
+      } catch (error) {
+        // Ignore storage errors.
+      }
     },
     login(token, email) {
       this.token = token
