@@ -70,8 +70,7 @@ export default {
         if (el.categorias === "Frutos secos") this.frutos.push(el);
       });
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.frutos = [];
     }
     const user = await api.getUser();

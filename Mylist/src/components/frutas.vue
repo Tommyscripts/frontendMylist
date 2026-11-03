@@ -72,8 +72,7 @@ export default {
         if (el.categorias === "Frutas") this.frutas.push(el);
       });
     } else {
-      console.error('productos.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.frutas = [];
     }
     const user = await api.getUser();

@@ -53,6 +53,7 @@
           dense
           :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="visible = !visible"
+          v-model="newUser.confirmPassword"
           style="color: rgb(75, 142, 38);"
         ></v-text-field>
         <v-row class="pt-9">
@@ -97,6 +98,7 @@ export default {
         username: "",
         email: "",
         password: "",
+        confirmPassword: "",
         role: "admin",
       },
   authStore: useAuthStore(),
@@ -108,17 +110,21 @@ export default {
       this.$router.go(-1);
     },
     async signupUser() {
-      // Si el campo de confirm password no existe (no vinculado) saltamos validación
-      if (this.newUser.password && this.newUser.confirmPassword && this.newUser.password !== this.newUser.confirmPassword) {
-        await this.dialog.open({ title: 'Error', text: 'Las contraseñas no coinciden', type: 'error', confirmText: 'Aceptar' })
+      if (!this.newUser.password || !this.newUser.confirmPassword) {
+        await this.dialog.open({ title: 'Error', text: 'Debes rellenar ambas contraseñas', type: 'error', confirmText: 'Aceptar' });
+        return;
+      }
+
+      if (this.newUser.password !== this.newUser.confirmPassword) {
+        await this.dialog.open({ title: 'Error', text: 'Las contraseñas no coinciden', type: 'error', confirmText: 'Aceptar' });
         return;
       }
 
       const response = await api.signup(this.newUser);
       if (response.error) {
-        await this.dialog.open({ title: 'Error', text: 'Error al crear cuenta', type: 'error', confirmText: 'Aceptar' })
+        await this.dialog.open({ title: 'Error', text: response.error || 'Error al crear cuenta', type: 'error', confirmText: 'Aceptar' });
       } else {
-        await this.dialog.open({ title: 'Cuenta creada', text: 'Cuenta de administrador creada', type: 'success', confirmText: 'Aceptar' })
+        await this.dialog.open({ title: 'Cuenta creada', text: 'Cuenta de administrador creada', type: 'success', confirmText: 'Aceptar' });
         this.$router.push({ name: "home" });
       }
     },

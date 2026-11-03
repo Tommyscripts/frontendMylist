@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" sm="10" md="6" class="mx-auto">
         <v-card class="pa-4 ma-4 fondo">
+          <form @submit.prevent="signupUser">
           <v-card-title style="color: rgb(75, 142, 38);">Signup</v-card-title>
           <v-text-field
           style="color: rgb(75, 142, 38);"
@@ -82,12 +83,13 @@
               class="custom-button"
               rounded
               dark
-              @click="signupUser"
+              type="submit"
             >
               <v-icon class="custom-icon" color="rgb(75, 142, 38)">mdi-check</v-icon>
               <span style="color: rgb(75, 142, 38);">Aceptar</span>
             </v-btn>
           </v-card-actions>
+          </form>
         </v-card>
       </v-col>
     </v-row>
@@ -105,7 +107,7 @@ export default {
       emailRules: [
         (value) => !!value || "Introduce tu email",
         (value) =>
-          value.match(/^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/) ||
+          /^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i.test(String(value || "")) ||
           "Error en el email",
       ],
       passwordRules: [

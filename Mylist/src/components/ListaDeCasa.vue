@@ -72,8 +72,7 @@ export default {
       this.toast.open('Sincronizado eliminación en servidor', 'success', 2500)
     }, onFailure: (item, result) => {
       // opcional: loguear para diagnóstico
-      console.debug('[syncQueue] fallo al sincronizar', item, result)
-    }})
+}})
   },
   
   methods: {
@@ -84,8 +83,7 @@ export default {
       try {
   if (this.busyIds[id]) return
   this.busyIds[id] = true
-  console.debug('[removeProducto] iniciar mover', { id })
-  // Intentar mover en backend de forma atómica (remove de casa y add a compra)
+// Intentar mover en backend de forma atómica (remove de casa y add a compra)
   try {
     const serverMove = await api.updateListaRemoveCasa(this.casa._id, id, this.compra)
     if (serverMove && serverMove.error) {
@@ -100,8 +98,7 @@ export default {
         return { error: serverMove.error }
       }
       // si esNotFound, caeremos a fallback abajo
-      console.debug('[removeProducto] serverMove no soportado, fallback add-before-remove', { serverMove })
-    } else {
+} else {
       // move exitoso en servidor -> actualizar UI local y salir
       this.casa.productos = this.casa.productos.filter(p => p._id !== id)
       delete this.busyIds[id]
@@ -113,13 +110,11 @@ export default {
     const text = errMove?.response ? `${errMove.response.status} - ${JSON.stringify(errMove.response.data)}` : errMove.message || String(errMove)
     const indicatesCannotPatch = typeof text === 'string' && text.includes('Cannot PATCH')
     if (!indicatesCannotPatch && !(errMove && errMove.response && errMove.response.status === 404)) {
-      console.error('[removeProducto] fallo al intentar move server-side', errMove)
-      await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
+await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       delete this.busyIds[id]
       return { error: text }
     }
-    console.debug('[removeProducto] move server-side no disponible, usando fallback add-before-remove', { errMove })
-  }
+}
 
   // ---- Fallback: add-before-remove (cuando backend no soporta move) ----
   const added = await tryAddProductToList(this.lists, 'Lista de compra', id, this.dialog, true)
@@ -159,8 +154,7 @@ export default {
   delete this.busyIds[id]
   return { removed, added };
       } catch (error) {
-        console.error(error);
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
@@ -174,23 +168,19 @@ export default {
     removed = await api.updateListaRemoveSolo(this.casa._id, id)
   } catch (e) {
     // normalizamos el error en removed para seguir el fallback
-    console.debug('[eliminarProducto] updateListaRemoveSolo threw', e)
-    removed = { error: e }
+removed = { error: e }
   }
 
   // Si la eliminación server-side falló o no existe, intentar DELETE fallback
   if (removed && removed.error) {
-    console.debug('[eliminarProducto] removeSolo no disponible, intentando DELETE fallback')
-    try {
+try {
       const delResp = await lista.delteProductoById(id, this.casa._id)
       if (delResp && delResp.error) {
-        console.warn('[eliminarProducto] DELETE fallback devolvió error, marcando local y encolando', delResp)
-        this._markLocallyRemoved(id)
+this._markLocallyRemoved(id)
         enqueueRemoval(this.casa._id, id)
       }
     } catch (errBackup) {
-      console.error('[eliminarProducto] fallo DELETE fallback', errBackup)
-      this._markLocallyRemoved(id)
+this._markLocallyRemoved(id)
       enqueueRemoval(this.casa._id, id)
     }
   }
@@ -199,11 +189,9 @@ export default {
   this.casa.productos = this.casa.productos.filter(p => p._id !== id)
   this.toast.open('Producto eliminado', 'success', 2000)
   delete this.busyIds[id]
-  console.debug('[eliminarProducto] finalizado (local)', { id })
-  return { removed }
+return { removed }
       } catch (error) {
-        console.error('[eliminarProducto] inesperado', error)
-        // Aun en error, informar de eliminación al usuario (fluidez), y encolar
+// Aun en error, informar de eliminación al usuario (fluidez), y encolar
         this._markLocallyRemoved(id)
         enqueueRemoval(this.casa._id, id)
         this.casa.productos = this.casa.productos.filter(p => p._id !== id)
@@ -223,8 +211,7 @@ export default {
           this.casa.productos = this.casa.productos.filter(p => !listRemovals.includes(String(p._id)))
         }
       } catch (e) {
-        console.error('[ListaDeCasa] fallo al cargar eliminaciones locales', e)
-      }
+}
     },
     _markLocallyRemoved(productId) {
       try {
@@ -236,8 +223,7 @@ export default {
         if (!map[listId].includes(String(productId))) map[listId].push(String(productId))
         localStorage.setItem(key, JSON.stringify(map))
       } catch (e) {
-        console.error('[ListaDeCasa] fallo al marcar eliminación local', e)
-      }
+}
     },
     async updateCantidad(id, nuevaCantidad) {
       try {
@@ -250,8 +236,7 @@ export default {
         // actualizar UI local: ya está enlazado via v-model
         return { success: true }
       } catch (error) {
-        console.error(error)
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
@@ -264,14 +249,12 @@ export default {
         // Preferir el valor del modelo (actualizado por v-model). Validar antes de enviar.
         const val = Number(producto.cantidad)
         if (Number.isNaN(val)) {
-          console.debug('[onCantidadInput] valor no numérico, omitiendo guardado', producto.cantidad)
-          return
+return
         }
         try {
           await this.updateCantidad(producto._id, val)
         } catch (e) {
-          console.debug('[onCantidadInput] update failed', e)
-        }
+}
       }, 700)
     },
   },

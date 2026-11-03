@@ -79,8 +79,7 @@ export async function tryAddProductToList(lists, listName, productId, dialog, al
   }
 
   // Si el producto ya existe en la lista destino (comparando varios posibles campos)
-  console.debug('[listUtils] listaEncontrada.productos sample', Array.isArray(listaEncontrada.productos) ? listaEncontrada.productos.slice(0,3) : listaEncontrada.productos)
-  const existeEnDestino = Array.isArray(listaEncontrada.productos) && listaEncontrada.productos.find(p => getId(p) === String(productId))
+const existeEnDestino = Array.isArray(listaEncontrada.productos) && listaEncontrada.productos.find(p => getId(p) === String(productId))
 
   // Si ya existe en la lista destino -> bloquear siempre
   if (existeEnDestino) {

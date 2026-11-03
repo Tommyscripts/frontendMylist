@@ -70,8 +70,7 @@
             if (el.categorias === "Bebidas") this.bebidas.push(el);
           });
         } else {
-          console.error('producto.addProduct no devolvió un array', result);
-          this.productos = [];
+this.productos = [];
           this.bebidas = [];
         }
       const user = await api.getUser();

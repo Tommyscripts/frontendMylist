@@ -70,8 +70,7 @@ export default {
         if (el.categorias === "Limpieza") this.limpiezas.push(el);
       });
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.limpiezas = [];
     }
     const user = await api.getUser();

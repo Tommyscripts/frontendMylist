@@ -73,8 +73,7 @@ export default {
         if (el.categorias === "Carnes") this.carnes.push(el);
       });
     } else {
-      console.error('productos.addProduct no devolvió un array', result);
-      // manejar caso de error (por ejemplo, mostrar mensaje o dejar arrays vacíos)
+// manejar caso de error (por ejemplo, mostrar mensaje o dejar arrays vacíos)
       this.productos = [];
       this.carnes = [];
     }

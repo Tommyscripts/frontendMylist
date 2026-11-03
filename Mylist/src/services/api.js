@@ -30,7 +30,18 @@ async function getUser() {
 
 async function signup(newUser) {
   try {
-    const response = await API.post("/auth/signup", newUser);
+    const payload = { ...newUser };
+    if (payload.role === "admin") {
+      const token = localStorage.getItem("token");
+      const response = await API.post("/users/admin", payload, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
+      return response.data;
+    }
+
+    const response = await API.post("/auth/signup", payload);
     return response.data;
   } catch (error) {
     const backendError = error?.response?.data?.error || error?.response?.data?.message;
@@ -50,7 +61,6 @@ async function login(User) {
 
 async function deleteUser(remove) {
   try {
-    // axios.delete acepta un objeto config como segundo parámetro; si necesitamos enviar body usar { data: remove }
     const response = await API.delete("/users/profile", { data: remove });
     return response.data;
   } catch (error) {
@@ -108,11 +118,10 @@ async function updateListaRemoveSolo(lista, id) {
     const response = await API.patch(`/users/lista/${lista}/remove/${id}`);
     return response.data;
   } catch (error) {
-    // Normalizar error para el cliente
     if (error && error.response) {
-      return { error: error.response.data || error.message, status: error.response.status }
+      return { error: error.response.data || error.message, status: error.response.status };
     }
-    return { error: error.message || String(error) }
+    return { error: error.message || String(error) };
   }
 }
 
@@ -149,5 +158,4 @@ export default {
   updateListaRemoveSolo,
 };
 
-// también exportamos la instancia de axios para usos directos en otros servicios
 export { API as axiosInstance };

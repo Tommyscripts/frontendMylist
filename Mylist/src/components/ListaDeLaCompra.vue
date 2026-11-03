@@ -77,8 +77,7 @@ export default {
   // Marcar busy para evitar doble-click
   if (this.busyIds[id]) return
   this.busyIds[id] = true
-  console.debug('[comprar] iniciar mover', { id, idx })
-  // Primero intentar añadir en la lista destino (Lista de casa)
+// Primero intentar añadir en la lista destino (Lista de casa)
   const added = await tryAddProductToList(this.lists, 'Lista de casa', id, this.dialog, true)
         if (!added || added.error) {
           // Si estaba duplicado en la lista destino, procedemos a eliminar en origen igualmente
@@ -108,11 +107,9 @@ export default {
   this.$emit("productoComprado", id);
   this.compra.productos.splice(idx, 1);
   delete this.busyIds[id]
-  console.debug('[comprar] mover completado', { id, removed, added })
-  return { removed, added }
+return { removed, added }
       } catch (error) {
-        console.error(error);
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
@@ -132,11 +129,9 @@ export default {
   this.compra.productos = this.compra.productos.filter(p => p._id !== id);
   // Vue 3: replace Vue2 helper this.$delete with plain delete
   delete this.busyIds[id]
-  console.debug('[eliminar] eliminado', { id, removed })
-  return { removed };
+return { removed };
       } catch (error) {
-        console.error(error);
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
@@ -149,8 +144,7 @@ export default {
         }
         return { success: true }
       } catch (error) {
-        console.error(error)
-        const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
+const text = error?.response ? `${error.response.status} - ${JSON.stringify(error.response.data)}` : error.message || String(error)
         await this.dialog.open({ title: 'Error', text, type: 'error', confirmText: 'Aceptar' })
       }
     },
@@ -161,14 +155,12 @@ export default {
         delete this.cantidadTimers[id]
         const val = Number(producto.cantidad)
         if (Number.isNaN(val)) {
-          console.debug('[onCantidadInput] valor no numérico, omitiendo guardado', producto.cantidad)
-          return
+return
         }
         try {
           await this.updateCantidad(producto._id, val)
         } catch (e) {
-          console.debug('[onCantidadInput] update failed', e)
-        }
+}
       }, 700)
     },
   },

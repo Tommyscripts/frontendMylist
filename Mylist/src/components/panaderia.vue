@@ -68,8 +68,7 @@ export default {
       this.productos = result;
       this.productos.forEach((el) => { if (el.categorias === "Panaderia") this.panaderias.push(el) })
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.panaderias = [];
     }
     const user = await api.getUser();

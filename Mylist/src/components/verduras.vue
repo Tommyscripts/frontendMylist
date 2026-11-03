@@ -76,8 +76,7 @@ export default {
         if (el.categorias === "Verduras") this.verduras.push(el);
       });
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.verduras = [];
     }
     const user = await api.getUser();

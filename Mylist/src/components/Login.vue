@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" sm="10" md="6" class="mx-auto">
         <v-card class="pa-4 ma-4 fondo">
+          <form @submit.prevent="userLogin">
           <v-card-title style="color: rgb(75, 142, 38);">Login</v-card-title>
           <v-text-field
           style="color: rgb(75, 142, 38);"
@@ -13,7 +14,6 @@
             filled
             rounded
             dense
-            @keydown.enter.prevent="userLogin"
           ></v-text-field>
           <v-text-field
           style="color: rgb(75, 142, 38);"
@@ -27,7 +27,6 @@
             dense
             :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="visible = !visible"
-            @keydown.enter.prevent="userLogin"
           ></v-text-field>
           <v-card-actions>
             <v-btn
@@ -36,7 +35,7 @@
               class="custom-button"
               rounded
               dark
-              @click="userLogin"
+              type="submit"
             >
               <v-icon class="custom-icon">mdi-check</v-icon>
               <span style="color: rgb(75, 142, 38);">Aceptar</span>
@@ -68,6 +67,7 @@
               <span style="color: rgb(75, 142, 38);">Volver</span>
             </v-btn>
           </v-card-actions>
+          </form>
         </v-card>
       </v-col>
     </v-row>
@@ -95,13 +95,14 @@ export default {
   },
   methods: {
     async userLogin() {
+      const email = String(this.email || "").trim();
       const user = {
-        email: this.email,
+        email,
         password: this.password,
       };
       const respond = await api.login(user);
       if (respond.error) {
-        await this.dialog.open({ title: 'Login fallido', text: 'Usuario o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.', type: 'error', confirmText: 'Aceptar' })
+        await this.dialog.open({ title: 'Login fallido', text: respond.error, type: 'error', confirmText: 'Aceptar' })
       } else {
         // Guardar token en store y en localStorage para que el interceptor lo use
         this.authStore.login(respond.token, respond.email);
