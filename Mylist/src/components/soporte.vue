@@ -65,8 +65,7 @@ export default {
           this.showSuccessOverlay = true; // Mostrar el overlay de éxito
         })
         .catch((error) => {
-          console.error('Error al enviar el correo electrónico:', error);
-          // Puedes mostrar un mensaje de error o tomar otras medidas según tus necesidades
+// Puedes mostrar un mensaje de error o tomar otras medidas según tus necesidades
         });
     },
   },

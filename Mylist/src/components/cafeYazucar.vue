@@ -68,8 +68,7 @@ export default {
       this.productos = result;
       this.productos.forEach((el) => { if (el.categorias === "Café y azúcar") this.cafes.push(el) })
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.cafes = [];
     }
     const user = await api.getUser();

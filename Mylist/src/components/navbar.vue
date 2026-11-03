@@ -92,8 +92,7 @@ export default {
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
-        console.error('Error al obtener los datos del usuario:', error);
-      }
+}
     },
   },
 

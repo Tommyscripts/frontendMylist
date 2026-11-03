@@ -74,8 +74,7 @@ export default {
       this.productos = result;
       this.productos.forEach((el) => { if (el.categorias === "Congelados") this.congelados.push(el) })
     } else {
-      console.error('producto.addProduct no devolvió un array', result);
-      this.productos = [];
+this.productos = [];
       this.congelados = [];
     }
     const user = await api.getUser();

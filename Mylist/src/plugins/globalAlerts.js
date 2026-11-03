@@ -13,8 +13,6 @@ export function setupGlobalAlerts(pinia) {
       toast.open(String(message), 'info', 4500)
     } catch (e) {
       // Si algo falla, fallback al alert nativo guardado
-      console.warn('No se pudo mostrar toast, fallback alert nativo:', e)
-      if (window.__native_alert) window.__native_alert(message)
-    }
+}
   }
 }

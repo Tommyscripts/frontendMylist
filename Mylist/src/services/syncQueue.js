@@ -8,8 +8,7 @@ function _loadQueue() {
     const raw = localStorage.getItem(QUEUE_KEY)
     return raw ? JSON.parse(raw) : []
   } catch (e) {
-    console.error('[syncQueue] fallo al leer queue', e)
-    return []
+return []
   }
 }
 
@@ -17,8 +16,7 @@ function _saveQueue(q) {
   try {
     localStorage.setItem(QUEUE_KEY, JSON.stringify(q))
   } catch (e) {
-    console.error('[syncQueue] fallo al guardar queue', e)
-  }
+}
 }
 
 async function _processItem(item) {
@@ -52,12 +50,12 @@ async function processQueue({ onSuccess, onFailure } = {}) {
       i--
       processed++
       if (typeof onSuccess === 'function') {
-        try { onSuccess(item, result) } catch (e) { console.error('[syncQueue] onSuccess callback failed', e) }
+        try { onSuccess(item, result) } catch (e) {}
       }
     } else {
       item.lastError = { status: result.status, data: result.data }
       if (typeof onFailure === 'function') {
-        try { onFailure(item, result) } catch (e) { console.error('[syncQueue] onFailure callback failed', e) }
+        try { onFailure(item, result) } catch (e) {}
       }
     }
   }
@@ -72,8 +70,7 @@ function enqueueRemoval(listId, productId) {
     _saveQueue(q)
     return { queued: true }
   } catch (e) {
-    console.error('[syncQueue] fallo al encolar', e)
-    return { queued: false, error: e }
+return { queued: false, error: e }
   }
 }
 
@@ -82,10 +79,10 @@ let _interval = null
 function startSyncQueue(options = {}) {
   const { intervalMs = 30000, onSuccess, onFailure } = options
   // run immediately once
-  processQueue({ onSuccess, onFailure }).catch(e => console.error('[syncQueue] processQueue initial failed', e))
+  processQueue({ onSuccess, onFailure }).catch(() => {})
   if (_interval) clearInterval(_interval)
   _interval = setInterval(() => {
-    processQueue({ onSuccess, onFailure }).catch(e => console.error('[syncQueue] processQueue failed', e))
+    processQueue({ onSuccess, onFailure }).catch(() => {})
   }, intervalMs)
 }
 
