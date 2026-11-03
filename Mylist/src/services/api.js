@@ -33,7 +33,8 @@ async function signup(newUser) {
     const response = await API.post("/auth/signup", newUser);
     return response.data;
   } catch (error) {
-    return { error: error.message };
+    const backendError = error?.response?.data?.error || error?.response?.data?.message;
+    return { error: backendError || error.message };
   }
 }
 
@@ -42,7 +43,8 @@ async function login(User) {
     const response = await API.post("/auth/login", User);
     return response.data;
   } catch (error) {
-    return { error: error.message };
+    const backendError = error?.response?.data?.error || error?.response?.data?.message;
+    return { error: backendError || error.message };
   }
 }
 
