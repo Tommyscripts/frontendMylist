@@ -79,6 +79,10 @@ export default {
       this.$router.push({ name: "home" });
     },
     async getUserData() {
+      if (!this.store.token) {
+        this.store.role = null
+        return
+      }
       try {
         this.isLoading = true;
         const userData = await api.getUser();
@@ -107,7 +111,9 @@ export default {
   },
 
   created() {
-    this.getUserData(); // Llama a getUserData al crear el componente
+    if (this.store.token) {
+      this.getUserData();
+    }
   },
 };
 </script>
